@@ -10,16 +10,20 @@ class DashboardManager {
   }
 
   async init() {
-    const user = await authManager.init();
-    if (user) {
-      await this.loadUserData(user.uid);
-      this.setupEventListeners();
-      this.setupSocialShare();
-      
-      // بدء الاستماع لتغيرات المرتبة
-      await this.setupRankListener(user.uid);
-    } else {
-      window.location.href = 'index.html';
+    try {
+      const user = await authManager.init();
+      if (user) {
+        await this.loadUserData(user.uid);
+        this.setupEventListeners();
+        this.setupSocialShare();
+        
+        // بدء الاستماع لتغيرات المرتبة
+        await this.setupRankListener(user.uid);
+      } else {
+        window.location.href = 'index.html';
+      }
+    } catch (error) {
+      console.error("Error initializing dashboard:", error);
     }
   }
 
@@ -39,24 +43,28 @@ class DashboardManager {
   }
 
   updateUserUI() {
-    const usernameEl = document.getElementById('username');
-    const userAvatar = document.getElementById('user-avatar');
-    const pointsCount = document.getElementById('points-count');
-    const joinDate = document.getElementById('join-date');
-    const referralLink = document.getElementById('referral-link');
-    
-    if (usernameEl) usernameEl.textContent = this.userData.name;
-    if (userAvatar) userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userData.name)}&background=random`;
-    if (pointsCount) pointsCount.textContent = this.userData.points || '0';
-    if (joinDate) joinDate.textContent = new Date(this.userData.joinDate).toLocaleDateString('ar-SA');
-    if (referralLink) referralLink.value = `${window.location.origin}${window.location.pathname}?ref=${this.userData.referralCode}`;
-    
-    // تحميل عدد الإحالات
-    this.loadReferralsCount(auth.currentUser.uid);
-    // تحميل معلومات المرتبة
-    this.loadRankInfo();
-    // التحقق من صلاحية المشرف وتحديث الواجهة
-    this.checkAdminStatus();
+    try {
+      const usernameEl = document.getElementById('username');
+      const userAvatar = document.getElementById('user-avatar');
+      const pointsCount = document.getElementById('points-count');
+      const joinDate = document.getElementById('join-date');
+      const referralLink = document.getElementById('referral-link');
+      
+      if (usernameEl) usernameEl.textContent = this.userData.name;
+      if (userAvatar) userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userData.name)}&background=random`;
+      if (pointsCount) pointsCount.textContent = this.userData.points || '0';
+      if (joinDate) joinDate.textContent = new Date(this.userData.joinDate).toLocaleDateString('ar-SA');
+      if (referralLink) referralLink.value = `${window.location.origin}${window.location.pathname}?ref=${this.userData.referralCode}`;
+      
+      // تحميل عدد الإحالات
+      this.loadReferralsCount(auth.currentUser.uid);
+      // تحميل معلومات المرتبة
+      this.loadRankInfo();
+      // التحقق من صلاحية المشرف وتحديث الواجهة
+      this.checkAdminStatus();
+    } catch (error) {
+      console.error("Error updating user UI:", error);
+    }
   }
 
   async checkAdminStatus() {
@@ -82,7 +90,8 @@ class DashboardManager {
     try {
       const snapshot = await get(ref(database, 'userReferrals/' + userId));
       const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-      document.getElementById('referrals-count').textContent = count;
+      const referralsCountEl = document.getElementById('referrals-count');
+      if (referralsCountEl) referralsCountEl.textContent = count;
     } catch (error) {
       console.error("Error loading referrals count:", error);
     }
@@ -93,6 +102,8 @@ class DashboardManager {
       const referralsRef = ref(database, 'userReferrals/' + userId);
       onValue(referralsRef, (snapshot) => {
         const referralsTable = document.getElementById('recent-referrals');
+        
+        if (!referralsTable) return;
         
         if (!snapshot.exists()) {
           referralsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد إحالات حتى الآن</td></tr>';
@@ -200,11 +211,13 @@ class DashboardManager {
     try {
       // تحميل النقاط المكتسبة من الشبكة
       const earnedPoints = await this.calculateEarnedPoints(userId);
-      document.getElementById('earned-points').textContent = earnedPoints;
+      const earnedPointsEl = document.getElementById('earned-points');
+      if (earnedPointsEl) earnedPointsEl.textContent = earnedPoints;
       
       // تحميل عدد الأعضاء الذين استفاد منهم
       const benefitedMembers = await this.countBenefitedMembers(userId);
-      document.getElementById('benefited-members').textContent = benefitedMembers;
+      const benefitedMembersEl = document.getElementById('benefited-members');
+      if (benefitedMembersEl) benefitedMembersEl.textContent = benefitedMembers;
       
       // تحميل آخر التوزيعات
       this.loadRecentDistributions(userId);
@@ -216,12 +229,22 @@ class DashboardManager {
   async calculateEarnedPoints(userId) {
     try {
       const logsRef = ref(database, 'pointDistributionLogs');
-      const snapshot = await get(query(logsRef, orderByChild('targetUserId'), equalTo(userId)));
+      const snapshot = await get(logsRef);
       
       if (!snapshot.exists()) return 0;
       
       const logs = snapshot.val();
-      return Object.values(logs).reduce((total, log) => total + (log.points || 0), 0);
+      let totalPoints = 0;
+      
+      // البحث في جميع السجلات عن تلك التي يكون targetUserId هو المستخدم الحالي
+      for (const logId in logs) {
+        const log = logs[logId];
+        if (log.targetUserId === userId) {
+          totalPoints += log.points || 0;
+        }
+      }
+      
+      return totalPoints;
     } catch (error) {
       console.error("Error calculating earned points:", error);
       return 0;
@@ -231,12 +254,21 @@ class DashboardManager {
   async countBenefitedMembers(userId) {
     try {
       const logsRef = ref(database, 'pointDistributionLogs');
-      const snapshot = await get(query(logsRef, orderByChild('targetUserId'), equalTo(userId)));
+      const snapshot = await get(logsRef);
       
       if (!snapshot.exists()) return 0;
       
       const logs = snapshot.val();
-      const uniqueMembers = new Set(Object.values(logs).map(log => log.sourceUserId));
+      const uniqueMembers = new Set();
+      
+      // البحث في جميع السجلات عن تلك التي يكون targetUserId هو المستخدم الحالي
+      for (const logId in logs) {
+        const log = logs[logId];
+        if (log.targetUserId === userId) {
+          uniqueMembers.add(log.sourceUserId);
+        }
+      }
+      
       return uniqueMembers.size;
     } catch (error) {
       console.error("Error counting benefited members:", error);
@@ -247,9 +279,10 @@ class DashboardManager {
   async loadRecentDistributions(userId) {
     try {
       const logsRef = ref(database, 'pointDistributionLogs');
-      const snapshot = await get(query(logsRef, orderByChild('targetUserId'), equalTo(userId)));
+      const snapshot = await get(logsRef);
       
       const distributionsTable = document.getElementById('recent-distributions');
+      if (!distributionsTable) return;
       
       if (!snapshot.exists()) {
         distributionsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد توزيعات حتى الآن</td></tr>';
@@ -257,14 +290,28 @@ class DashboardManager {
       }
       
       const logs = snapshot.val();
-      const logsArray = Object.entries(logs)
-        .map(([id, log]) => ({ id, ...log }))
-        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-        .slice(0, 5); // عرض آخر 5 توزيعات فقط
+      const userLogs = [];
+      
+      // جمع السجلات الخاصة بالمستخدم الحالي فقط
+      for (const logId in logs) {
+        const log = logs[logId];
+        if (log.targetUserId === userId) {
+          userLogs.push({ id: logId, ...log });
+        }
+      }
+      
+      // ترتيب السجلات حسب التاريخ (الأحدث أولاً) وعرض آخر 5 فقط
+      userLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      const recentLogs = userLogs.slice(0, 5);
       
       distributionsTable.innerHTML = '';
       
-      for (const log of logsArray) {
+      if (recentLogs.length === 0) {
+        distributionsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد توزيعات حتى الآن</td></tr>';
+        return;
+      }
+      
+      for (const log of recentLogs) {
         // الحصول على اسم العضو المصدر
         const userSnapshot = await get(ref(database, 'users/' + log.sourceUserId));
         const userName = userSnapshot.exists() ? userSnapshot.val().name : 'مستخدم غير معروف';
@@ -334,71 +381,6 @@ class DashboardManager {
     }
   }
 }
-
-// دالة يدوية للتحقق من الترقيات (للاستخدام في التصحيح)
-window.checkPromotionManually = async () => {
-  if (!auth.currentUser) return;
-  
-  try {
-    // إنشاء عنصر تنبيه إذا لم يكن موجوداً
-    let alert = document.getElementById('login-alert');
-    if (!alert) {
-      alert = document.createElement('div');
-      alert.id = 'promotion-alert';
-      alert.style.position = 'fixed';
-      alert.style.top = '20px';
-      alert.style.right = '20px';
-      alert.style.zIndex = '1000';
-      document.body.appendChild(alert);
-    }
-    
-    alert.className = 'alert alert-info';
-    alert.style.display = 'block';
-    alert.textContent = 'جاري التحقق من الترقيات...';
-    
-    const promoted = await checkPromotions(auth.currentUser.uid);
-    
-    if (promoted) {
-      alert.className = 'alert alert-success';
-      alert.textContent = 'تمت الترقية بنجاح!';
-    } else {
-      alert.className = 'alert alert-info';
-      alert.textContent = 'لا توجد ترقية متاحة حالياً';
-    }
-    
-    setTimeout(() => {
-      alert.style.display = 'none';
-      window.location.reload();
-    }, 3000);
-    
-  } catch (error) {
-    console.error("Error in manual promotion check:", error);
-    
-    // عرض رسالة الخطأ
-    const alert = document.getElementById('promotion-alert') || document.createElement('div');
-    alert.className = 'alert alert-error';
-    alert.style.display = 'block';
-    alert.textContent = 'حدث خطأ أثناء التحقق من الترقيات';
-    document.body.appendChild(alert);
-    
-    setTimeout(() => {
-      alert.style.display = 'none';
-    }, 3000);
-  }
-};
-
-// إضافة زر للتحقق اليدوي من الترقيات (للتdebug)
-document.addEventListener('DOMContentLoaded', () => {
-  const rankSection = document.querySelector('.rank-section');
-  if (rankSection) {
-    const manualCheckBtn = document.createElement('button');
-    manualCheckBtn.textContent = 'تحقق من الترقيات يدوياً';
-    manualCheckBtn.className = 'action-btn';
-    manualCheckBtn.style.marginTop = '10px';
-    manualCheckBtn.onclick = window.checkPromotionManually;
-    rankSection.appendChild(manualCheckBtn);
-  }
-});
 
 // تهيئة النظام عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
