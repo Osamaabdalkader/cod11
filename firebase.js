@@ -318,7 +318,7 @@ const searchUsers = async (searchTerm, rankFilter = null) => {
         continue;
       }
       
-      // إذا كان هناك مصطلح بحث، تطبيق البحث
+      // إذا كان هناك مصطلح البحث، تطبيق البحث
       if (searchTerm && searchTerm.trim() !== '') {
         const searchTermLower = searchTerm.toLowerCase();
         const nameMatch = user.name && user.name.toLowerCase().includes(searchTermLower);
@@ -339,7 +339,102 @@ const searchUsers = async (searchTerm, rankFilter = null) => {
   }
 };
 
-// دالة لإضافة نقاط للمستخدم (للمشرفين فقط)
+// دالة مساعدة للحصول على معرف المستخدم من رمز الإحالة
+const getUserIdFromReferralCode = async (referralCode) => {
+  try {
+    const snapshot = await get(child(ref(database), `referralCodes/${referralCode}`));
+    return snapshot.exists() ? snapshot.val() : null;
+  } catch (error) {
+    console.error("Error getting user ID from referral code:", error);
+    return null;
+  }
+};
+
+// دالة جديدة لتوزيع النقاط على مستويات الإحالة
+const distributePointsToUplines = async (userId, pointsToAdd, adminId) => {
+  try {
+    // النسب للمستويات من 1 إلى 10
+    const percentages = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // 10% للجيل الأول، 9% للثاني، ...، 1% للعاشر
+    
+    let currentUserId = userId;
+    let distributedPoints = 0;
+    
+    // التوزيع عبر 10 مستويات
+    for (let level = 0; level < 10; level++) {
+      // الحصول على بيانات المستخدم الحالي
+      const userRef = ref(database, 'users/' + currentUserId);
+      const userSnapshot = await get(userRef);
+      
+      if (!userSnapshot.exists()) break;
+      
+      const userData = userSnapshot.val();
+      
+      // إذا لم يكن هناك محيل، توقف
+      if (!userData.referredBy) break;
+      
+      // العثور على المحيل (المستخدم في المستوى الأعلى)
+      const referrerId = await getUserIdFromReferralCode(userData.referredBy);
+      if (!referrerId) break;
+      
+      const referrerRef = ref(database, 'users/' + referrerId);
+      const referrerSnapshot = await get(referrerRef);
+      
+      if (!referrerSnapshot.exists()) break;
+      
+      const referrerData = referrerSnapshot.val();
+      const currentReferrerPoints = referrerData.points || 0;
+      
+      // حساب النقاط التي سيتم إضافتها للمحيل
+      const pointsForUpline = Math.round(pointsToAdd * (percentages[level] / 100));
+      
+      if (pointsForUpline > 0) {
+        // تحديث نقاط المحيل
+        await update(referrerRef, {
+          points: currentReferrerPoints + pointsForUpline
+        });
+        
+        distributedPoints += pointsForUpline;
+        
+        console.log(`تم إضافة ${pointsForUpline} نقطة للمحيل ${referrerId} في المستوى ${level + 1}`);
+        
+        // تسجيل عملية التوزيع
+        const distributionLogRef = ref(database, 'pointDistributionLogs/' + Date.now());
+        await set(distributionLogRef, {
+          sourceUserId: userId,
+          targetUserId: referrerId,
+          points: pointsForUpline,
+          level: level + 1,
+          percentage: percentages[level],
+          distributedBy: adminId,
+          timestamp: new Date().toISOString()
+        });
+        
+        // التحقق من ترقية المحيل
+        await checkPromotions(referrerId);
+      }
+      
+      // الانتقال إلى المحيل في المستوى الأعلى
+      currentUserId = referrerId;
+    }
+    
+    // تسجيل إجمالي النقاط الموزعة
+    if (distributedPoints > 0) {
+      const totalDistributionRef = ref(database, 'totalDistributions/' + Date.now());
+      await set(totalDistributionRef, {
+        sourceUserId: userId,
+        totalDistributed: distributedPoints,
+        originalPoints: pointsToAdd,
+        distributedBy: adminId,
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+  } catch (error) {
+    console.error("Error distributing points to uplines:", error);
+  }
+};
+
+// دالة معدلة لإضافة النقاط مع التوزيع التلقائي
 const addPointsToUser = async (userId, pointsToAdd, adminId) => {
   try {
     // التحقق من أن المستخدم الذي يضيف النقاط هو مشرف
@@ -375,6 +470,9 @@ const addPointsToUser = async (userId, pointsToAdd, adminId) => {
     });
     
     console.log(`تمت إضافة ${pointsToAdd} نقطة للمستخدم ${userId} بواسطة المشرف ${adminId}`);
+    
+    // توزيع النقاط على أعضاء الشبكة (الخط العلوي)
+    await distributePointsToUplines(userId, pointsToAdd, adminId);
     
     // التحقق من الترقية بعد إضافة النقاط
     await checkPromotions(userId);
@@ -415,5 +513,6 @@ export {
   ref, set, push, onValue, serverTimestamp, update, remove, query, orderByChild, equalTo, get, child,
   storageRef, uploadBytesResumable, getDownloadURL,
   checkPromotions, checkTeamPromotions, addPointsAndCheckPromotion, setupRankChangeListener,
-  checkAdminStatus, getAllUsers, searchUsers, addPointsToUser, updateAdminStatus
+  checkAdminStatus, getAllUsers, searchUsers, addPointsToUser, updateAdminStatus,
+  getUserIdFromReferralCode, distributePointsToUplines
 };
