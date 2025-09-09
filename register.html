@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب - نظام الإحالة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h1>
+            <p>انضم إلى نظام الإحالة وابدأ في بناء شبكتك</p>
+        </header>
+        
+        <div class="tab-content active">
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">الاسم الكامل</label>
+                    <input type="text" id="register-name" placeholder="أدخل اسمك الكامل" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email">البريد الإلكتروني</label>
+                    <input type="email" id="register-email" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">كلمة المرور</label>
+                    <input type="password" id="register-password" placeholder="أنشئ كلمة مرور قوية" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="referral-code">رمز الإحالة (اختياري)</label>
+                    <input type="text" id="referral-code" placeholder="أدخل رمز الإحالة إذا كان لديك">
+                </div>
+                
+                <button type="submit">إنشاء حساب</button>
+            </form>
+            
+            <div class="alert" id="register-alert"></div>
+            
+            <p style="margin-top: 20px; text-align: center;">
+                لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
+            </p>
+            
+            <p style="text-align: center;">
+                <a href="index.html">العودة إلى الصفحة الرئيسية</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+<!-- ملفات التطبيق -->
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="register.js"></script>
+
+    <script>
+        // التحقق من وجود رمز إحالة في URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        if (refCode) {
+            document.getElementById('referral-code').value = refCode;
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - نظام الإحالة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="user-info">
+                <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
+                <span id="username">مستخدم</span>
+            </div>
+            <h1><i class="fas fa-tachometer-alt"></i> لوحة التحكم</h1>
+            <p>مرحبًا بك في لوحة تحكم نظام الإحالة</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab" onclick="window.location.href='index.html'">الرئيسية</div>
+            <div class="tab active">لوحة التحكم</div>
+            <div class="tab" onclick="window.location.href='network.html'">شبكتي</div>
+            <!-- في قسم التبويبات في dashboard.html -->
+<div class="tab admin-only" onclick="window.location.href='admin.html'">
+    <i class="fas fa-user-shield"></i> لوحة المشرفين
+</div>
+            <div class="tab" onclick="window.location.href='management.html'">الإدارة</div>
+            <div class="tab" id="logout-btn">تسجيل الخروج</div>
+        </div>
+
+<div class="rank-section">
+  <h3><i class="fas fa-trophy"></i> نظام المراتب</h3>
+  <div id="rank-info">
+    <div class="loading">
+      <i class="fas fa-spinner fa-spin"></i> جاري تحميل معلومات المرتبة...
+    </div>
+  </div>
+</div>
+        <div class="tab-content active">
+            <div class="dashboard">
+                <div class="stat-card">
+                    <i class="fas fa-users fa-2x"></i>
+                    <div class="stat-number" id="referrals-count">0</div>
+                    <div class="stat-label">إجمالي الإحالات</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-gift fa-2x"></i>
+                    <div class="stat-number" id="points-count">0</div>
+                    <div class="stat-label">نقاط المكافآت</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-day fa-2x"></i>
+                    <div class="stat-number" id="join-date">-</div>
+                    <div class="stat-label">تاريخ الانضمام</div>
+                </div>
+            </div>
+            
+            <div class="referral-section"> 
+                
+                <h3><i class="fas fa-share-alt"></i> رابط الإحالة الخاص بك</h3>
+                <p>شارك هذا الرابط مع أصدقائك لتحصل على نقاط مكافآت عند انضمامهم.</p>
+                
+                <div class="referral-link">
+                    <input type="text" id="referral-link" readonly>
+                    <button class="copy-btn" id="copy-link-btn"><i class="fas fa-copy"></i> نسخ</button>
+                </div>
+                
+                <div class="social-share">
+                    <button class="social-btn facebook" id="share-fb"><i class="fab fa-facebook"></i> فيسبوك</button>
+                    <button class="social-btn twitter" id="share-twitter"><i class="fab fa-twitter"></i> تويتر</button>
+                    <button class="social-btn whatsapp" id="share-whatsapp"><i class="fab fa-whatsapp"></i> واتساب</button>
+                </div>
+            </div>
+            
+            <h3><i class="fas fa-list"></i> أحدث الإحالات</h3>
+            <table class="referrals-table">
+                <thead>
+                    <tr>
+                        <th>الاسم</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>تاريخ الانضمام</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-referrals">
+                    <tr>
+                        <td colspan="4" style="text-align: center;">لا توجد إحالات حتى الآن</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+<!-- ملفات التطبيق -->
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="dashboard.js"></script>
+
+    <script>
+        // مشاركة على وسائل التواصل
+        document.getElementById('share-fb').addEventListener('click', () => {
+            const url = encodeURIComponent(document.getElementById('referral-link').value);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
+        });
+        
+        document.getElementById('share-twitter').addEventListener('click', () => {
+            const text = encodeURIComponent('انضم إلى هذا الموقع الرائع عبر رابط الإحالة الخاص بي!');
+            const url = encodeURIComponent(document.getElementById('referral-link').value);
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+        });
+        
+        document.getElementById('share-whatsapp').addEventListener('click', () => {
+            const text = encodeURIComponent('انضم إلى هذا الموقع الرائع عبر رابط الإحالة الخاص بي: ');
+            const url = encodeURIComponent(document.getElementById('referral-link').value);
+            window.open(`https://wa.me/?text=${text}${url}`, '_blank');
+        });
+    </script>
+</body>
+</html>
+
+

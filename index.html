@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الإحالة - الرئيسية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="user-info auth-only">
+                <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
+                <span id="username">مستخدم</span>
+            </div>
+            <h1><i class="fas fa-network-wired"></i> نظام إدارة شبكة الإحالات</h1>
+            <p>ادارة وتتبع شبكة الإحالات الخاصة بك بشكل كامل</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab active">الرئيسية</div>
+            <div class="tab auth-only admin-only" onclick="window.location.href='admin.html'">لوحة المشرفين</div>
+            <div class="tab auth-only" onclick="window.location.href='dashboard.html'">لوحة التحكم</div>
+            <div class="tab auth-only" onclick="window.location.href='network.html'">شبكتي</div>
+            <div class="tab auth-only" onclick="window.location.href='management.html'">الإدارة</div>
+            <div class="tab unauth-only" onclick="window.location.href='login.html'">تسجيل الدخول</div>
+            <div class="tab unauth-only" onclick="window.location.href='register.html'">إنشاء حساب</div>
+        </div>
+        
+        <div class="tab-content active">
+            <h2>مرحبًا بك في نظام الإحالة</h2>
+            <p>هذا النظام يمكنك من إنشاء شبكة الإحالات الخاصة بك وكسب النقاط والمكافآت.</p>
+            
+            <div class="auth-only">
+                <p>يمكنك الآن الانتقال إلى <a href="dashboard.html">لوحة التحكم</a> لإدارة حسابك.</p>
+            </div>
+            
+            <div class="unauth-only">
+                <p>للبدء، يرجى <a href="login.html">تسجيل الدخول</a> أو <a href="register.html">إنشاء حساب جديد</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+<!-- ملفات التطبيق -->
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+</body>
+</html>

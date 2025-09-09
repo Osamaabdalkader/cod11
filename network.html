@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شبكتي - نظام الإحالة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="user-info">
+                <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
+                <span id="username">مستخدم</span>
+            </div>
+            <h1><i class="fas fa-network-wired"></i> شبكة الإحالات</h1>
+            <p>عرض كامل لشبكة الإحالات الخاصة بك</p>
+        </header>
+        
+        <div class="tabs">
+            <div class="tab" onclick="window.location.href='index.html'">الرئيسية</div>
+            <div class="tab" onclick="window.location.href='dashboard.html'">لوحة التحكم</div>
+            <div class="tab active">شبكتي</div>
+            <div class="tab" onclick="window.location.href='management.html'">الإدارة</div>
+            <div class="tab" id="logout-btn">تسجيل الخروج</div>
+        </div>
+        
+        <div class="tab-content active">
+            <h2>شبكة الإحالات الخاصة بي</h2>
+            <p>هنا يمكنك رؤية شبكة الإحالات الخاصة بك بشكل كامل مع جميع المستويات.</p>
+            
+            <div class="network-container" id="network-container">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> جاري تحميل الشبكة...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+<!-- ملفات التطبيق -->
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="network.js"></script>
+</body>
+</html>
+
+
+
