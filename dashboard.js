@@ -1,5 +1,5 @@
 // dashboard.js
-import { auth, database, ref, get, onValue } from './firebase.js';
+import { auth, database, ref, get, onValue, query, orderByChild, equalTo } from './firebase.js';
 import { checkPromotions, setupRankChangeListener, checkAdminStatus } from './firebase.js';
 import { authManager } from './auth.js';
 
@@ -31,6 +31,7 @@ class DashboardManager {
       if (this.userData) {
         this.updateUserUI();
         this.loadRecentReferrals(userId);
+        this.loadDistributionData(userId); // تحميل بيانات التوزيع
       }
     } catch (error) {
       console.error("Error loading user data:", error);
@@ -192,6 +193,92 @@ class DashboardManager {
       
     } catch (error) {
       console.error("Error setting up rank listener:", error);
+    }
+  }
+
+  async loadDistributionData(userId) {
+    try {
+      // تحميل النقاط المكتسبة من الشبكة
+      const earnedPoints = await this.calculateEarnedPoints(userId);
+      document.getElementById('earned-points').textContent = earnedPoints;
+      
+      // تحميل عدد الأعضاء الذين استفاد منهم
+      const benefitedMembers = await this.countBenefitedMembers(userId);
+      document.getElementById('benefited-members').textContent = benefitedMembers;
+      
+      // تحميل آخر التوزيعات
+      this.loadRecentDistributions(userId);
+    } catch (error) {
+      console.error("Error loading distribution data:", error);
+    }
+  }
+
+  async calculateEarnedPoints(userId) {
+    try {
+      const logsRef = ref(database, 'pointDistributionLogs');
+      const snapshot = await get(query(logsRef, orderByChild('targetUserId'), equalTo(userId)));
+      
+      if (!snapshot.exists()) return 0;
+      
+      const logs = snapshot.val();
+      return Object.values(logs).reduce((total, log) => total + (log.points || 0), 0);
+    } catch (error) {
+      console.error("Error calculating earned points:", error);
+      return 0;
+    }
+  }
+
+  async countBenefitedMembers(userId) {
+    try {
+      const logsRef = ref(database, 'pointDistributionLogs');
+      const snapshot = await get(query(logsRef, orderByChild('targetUserId'), equalTo(userId)));
+      
+      if (!snapshot.exists()) return 0;
+      
+      const logs = snapshot.val();
+      const uniqueMembers = new Set(Object.values(logs).map(log => log.sourceUserId));
+      return uniqueMembers.size;
+    } catch (error) {
+      console.error("Error counting benefited members:", error);
+      return 0;
+    }
+  }
+
+  async loadRecentDistributions(userId) {
+    try {
+      const logsRef = ref(database, 'pointDistributionLogs');
+      const snapshot = await get(query(logsRef, orderByChild('targetUserId'), equalTo(userId)));
+      
+      const distributionsTable = document.getElementById('recent-distributions');
+      
+      if (!snapshot.exists()) {
+        distributionsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد توزيعات حتى الآن</td></tr>';
+        return;
+      }
+      
+      const logs = snapshot.val();
+      const logsArray = Object.entries(logs)
+        .map(([id, log]) => ({ id, ...log }))
+        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        .slice(0, 5); // عرض آخر 5 توزيعات فقط
+      
+      distributionsTable.innerHTML = '';
+      
+      for (const log of logsArray) {
+        // الحصول على اسم العضو المصدر
+        const userSnapshot = await get(ref(database, 'users/' + log.sourceUserId));
+        const userName = userSnapshot.exists() ? userSnapshot.val().name : 'مستخدم غير معروف';
+        
+        const row = distributionsTable.insertRow();
+        row.innerHTML = `
+          <td>${userName}</td>
+          <td>${log.points}</td>
+          <td>${log.level}</td>
+          <td>${new Date(log.timestamp).toLocaleDateString('ar-SA')}</td>
+        `;
+      }
+    } catch (error) {
+      console.error("Error loading recent distributions:", error);
     }
   }
 
