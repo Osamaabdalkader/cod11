@@ -46,6 +46,7 @@ class AdminManager {
     
     this.setupEventListeners();
     this.loadAllUsers();
+    this.setupDistributionTab();
   }
 
   async loadCurrentUserData() {
@@ -65,6 +66,18 @@ class AdminManager {
       }
     } catch (error) {
       console.error("Error loading current user data:", error);
+    }
+  }
+
+  setupDistributionTab() {
+    // إضافة تبويب جديد لسجل التوزيع
+    const tabsContainer = document.querySelector('.tabs');
+    if (tabsContainer) {
+      const distributionTab = document.createElement('div');
+      distributionTab.className = 'tab';
+      distributionTab.innerHTML = '<i class="fas fa-share-alt"></i> توزيع النقاط';
+      distributionTab.onclick = () => this.showDistributionHistory();
+      tabsContainer.appendChild(distributionTab);
     }
   }
 
@@ -230,6 +243,139 @@ class AdminManager {
       logoutBtn.addEventListener('click', () => {
         authManager.handleLogout();
       });
+    }
+  }
+
+  async showDistributionHistory() {
+    // تحميل وعرض سجل توزيع النقاط
+    try {
+      const distributionLogs = await this.loadDistributionLogs();
+      this.displayDistributionLogs(distributionLogs);
+    } catch (error) {
+      console.error("Error loading distribution logs:", error);
+    }
+  }
+
+  async loadDistributionLogs() {
+    try {
+      const logsRef = ref(database, 'pointDistributionLogs');
+      const snapshot = await get(logsRef);
+      
+      if (!snapshot.exists()) return [];
+      
+      const logs = snapshot.val();
+      const logsArray = Object.entries(logs).map(([id, log]) => ({ id, ...log }));
+      
+      // ترتيب حسب التاريخ (الأحدث أولاً)
+      return logsArray.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    } catch (error) {
+      console.error("Error loading distribution logs:", error);
+      return [];
+    }
+  }
+
+  displayDistributionLogs(logs) {
+    // إنشاء واجهة لعرض سجل التوزيع
+    const adminPanel = document.querySelector('.admin-panel');
+    if (!adminPanel) return;
+    
+    adminPanel.innerHTML = `
+      <h2><i class="fas fa-share-alt"></i> سجل توزيع النقاط</h2>
+      
+      <div class="search-section">
+        <div class="search-filters">
+          <input type="text" id="distribution-search" placeholder="ابحث بالاسم أو البريد الإلكتروني">
+          <select id="distribution-level-filter">
+            <option value="">جميع المستويات</option>
+            <option value="1">المستوى 1</option>
+            <option value="2">المستوى 2</option>
+            <option value="3">المستوى 3</option>
+            <option value="4">المستوى 4</option>
+            <option value="5">المستوى 5</option>
+            <option value="6">المستوى 6</option>
+            <option value="7">المستوى 7</option>
+            <option value="8">المستوى 8</option>
+            <option value="9">المستوى 9</option>
+            <option value="10">المستوى 10</option>
+          </select>
+          <button id="distribution-search-btn"><i class="fas fa-search"></i> بحث</button>
+        </div>
+      </div>
+      
+      <div style="overflow-x: auto;">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>المستخدم المصدر</th>
+              <th>المستخدم المستفيد</th>
+              <th>النقاط</th>
+              <th>المستوى</th>
+              <th>النسبة</th>
+              <th>التاريخ</th>
+            </tr>
+          </thead>
+          <tbody id="distribution-logs">
+            ${logs.length === 0 ? 
+              '<tr><td colspan="6" style="text-align: center;">لا توجد سجلات توزيع</td></tr>' : 
+              logs.map(log => `
+                <tr>
+                  <td>${log.sourceUserId}</td>
+                  <td>${log.targetUserId}</td>
+                  <td>${log.points}</td>
+                  <td>${log.level}</td>
+                  <td>${log.percentage}%</td>
+                  <td>${new Date(log.timestamp).toLocaleString('ar-SA')}</td>
+                </tr>
+              `).join('')
+            }
+          </tbody>
+        </table>
+      </div>
+      
+      <div style="margin-top: 20px;">
+        <button onclick="window.location.reload()">العودة إلى إدارة المستخدمين</button>
+      </div>
+    `;
+    
+    // إضافة مستمعين لأحداث البحث
+    this.setupDistributionSearch();
+  }
+
+  setupDistributionSearch() {
+    // البحث في سجل التوزيع
+    const searchBtn = document.getElementById('distribution-search-btn');
+    const searchInput = document.getElementById('distribution-search');
+    const levelFilter = document.getElementById('distribution-level-filter');
+    
+    if (searchBtn) {
+      searchBtn.addEventListener('click', () => this.searchDistributionLogs());
+    }
+    
+    if (searchInput) {
+      searchInput.addEventListener('keyup', () => this.searchDistributionLogs());
+    }
+    
+    if (levelFilter) {
+      levelFilter.addEventListener('change', () => this.searchDistributionLogs());
+    }
+  }
+
+  async searchDistributionLogs() {
+    // البحث والتصفية في سجل التوزيع
+    const searchTerm = document.getElementById('distribution-search').value;
+    const levelFilter = document.getElementById('distribution-level-filter').value;
+    
+    try {
+      const allLogs = await this.loadDistributionLogs();
+      const filteredLogs = allLogs.filter(log => {
+        const matchesLevel = !levelFilter || log.level.toString() === levelFilter;
+        // هنا يمكن إضافة البحث بالاسم إذا كان متاحاً
+        return matchesLevel;
+      });
+      
+      this.displayDistributionLogs(filteredLogs);
+    } catch (error) {
+      console.error("Error searching distribution logs:", error);
     }
   }
 
