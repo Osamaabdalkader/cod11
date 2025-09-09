@@ -56,6 +56,50 @@
                     <div class="stat-label">تاريخ الانضمام</div>
                 </div>
             </div>
+
+            <!-- dashboard.html - إضافة قسم لعرض توزيع النقاط -->
+<!-- ... الكود الحالي ... -->
+  <!-- ... الأقسام الحالية ... -->
+  
+  <!-- قسم جديد لعرض توزيع النقاط -->
+  <div class="referral-section">
+    <h3><i class="fas fa-share-alt"></i> توزيع النقاط في شبكتك</h3>
+    <p>عرض النقاط التي حصلت عليها من خلال أعضاء شبكتك</p>
+    
+    <div class="dashboard">
+      <div class="stat-card">
+        <i class="fas fa-coins fa-2x"></i>
+        <div class="stat-number" id="earned-points">0</div>
+        <div class="stat-label">النقاط المكتسبة من الشبكة</div>
+      </div>
+      
+      <div class="stat-card">
+        <i class="fas fa-users fa-2x"></i>
+        <div class="stat-number" id="benefited-members">0</div>
+        <div class="stat-label">أعضاء استفدت منهم</div>
+      </div>
+    </div>
+    
+    <h4>آخر التوزيعات</h4>
+    <table class="referrals-table">
+      <thead>
+        <tr>
+          <th>العضو المصدر</th>
+          <th>النقاط</th>
+          <th>المستوى</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+      <tbody id="recent-distributions">
+        <tr>
+          <td colspan="4" style="text-align: center;">لا توجد توزيعات حتى الآن</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ... بقية الكود ... -->
             
             <div class="referral-section"> 
                 
