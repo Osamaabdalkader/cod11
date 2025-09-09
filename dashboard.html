@@ -22,22 +22,22 @@
             <div class="tab" onclick="window.location.href='index.html'">الرئيسية</div>
             <div class="tab active">لوحة التحكم</div>
             <div class="tab" onclick="window.location.href='network.html'">شبكتي</div>
-            <!-- في قسم التبويبات في dashboard.html -->
-<div class="tab admin-only" onclick="window.location.href='admin.html'">
-    <i class="fas fa-user-shield"></i> لوحة المشرفين
-</div>
+            <div class="tab admin-only" onclick="window.location.href='admin.html'">
+                <i class="fas fa-user-shield"></i> لوحة المشرفين
+            </div>
             <div class="tab" onclick="window.location.href='management.html'">الإدارة</div>
             <div class="tab" id="logout-btn">تسجيل الخروج</div>
         </div>
 
-<div class="rank-section">
-  <h3><i class="fas fa-trophy"></i> نظام المراتب</h3>
-  <div id="rank-info">
-    <div class="loading">
-      <i class="fas fa-spinner fa-spin"></i> جاري تحميل معلومات المرتبة...
-    </div>
-  </div>
-</div>
+        <div class="rank-section">
+            <h3><i class="fas fa-trophy"></i> نظام المراتب</h3>
+            <div id="rank-info">
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> جاري تحميل معلومات المرتبة...
+                </div>
+            </div>
+        </div>
+        
         <div class="tab-content active">
             <div class="dashboard">
                 <div class="stat-card">
@@ -55,54 +55,20 @@
                     <div class="stat-number" id="join-date">-</div>
                     <div class="stat-label">تاريخ الانضمام</div>
                 </div>
+                <!-- البطاقات الجديدة -->
+                <div class="stat-card">
+                    <i class="fas fa-coins fa-2x"></i>
+                    <div class="stat-number" id="earned-points">0</div>
+                    <div class="stat-label">النقاط من الشبكة</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-friends fa-2x"></i>
+                    <div class="stat-number" id="benefited-members">0</div>
+                    <div class="stat-label">أعضاء استفدت منهم</div>
+                </div>
             </div>
-
-            <!-- dashboard.html - إضافة قسم لعرض توزيع النقاط -->
-<!-- ... الكود الحالي ... -->
-  <!-- ... الأقسام الحالية ... -->
-  
-  <!-- قسم جديد لعرض توزيع النقاط -->
-  <div class="referral-section">
-    <h3><i class="fas fa-share-alt"></i> توزيع النقاط في شبكتك</h3>
-    <p>عرض النقاط التي حصلت عليها من خلال أعضاء شبكتك</p>
-    
-    <div class="dashboard">
-      <div class="stat-card">
-        <i class="fas fa-coins fa-2x"></i>
-        <div class="stat-number" id="earned-points">0</div>
-        <div class="stat-label">النقاط المكتسبة من الشبكة</div>
-      </div>
-      
-      <div class="stat-card">
-        <i class="fas fa-users fa-2x"></i>
-        <div class="stat-number" id="benefited-members">0</div>
-        <div class="stat-label">أعضاء استفدت منهم</div>
-      </div>
-    </div>
-    
-    <h4>آخر التوزيعات</h4>
-    <table class="referrals-table">
-      <thead>
-        <tr>
-          <th>العضو المصدر</th>
-          <th>النقاط</th>
-          <th>المستوى</th>
-          <th>التاريخ</th>
-        </tr>
-      </thead>
-      <tbody id="recent-distributions">
-        <tr>
-          <td colspan="4" style="text-align: center;">لا توجد توزيعات حتى الآن</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ... بقية الكود ... -->
             
             <div class="referral-section"> 
-                
                 <h3><i class="fas fa-share-alt"></i> رابط الإحالة الخاص بك</h3>
                 <p>شارك هذا الرابط مع أصدقائك لتحصل على نقاط مكافآت عند انضمامهم.</p>
                 
@@ -134,14 +100,35 @@
                     </tr>
                 </tbody>
             </table>
+
+            <!-- قسم توزيع النقاط الجديد -->
+            <div class="referral-section">
+                <h3><i class="fas fa-share-alt"></i> توزيع النقاط في شبكتك</h3>
+                <p>عرض النقاط التي حصلت عليها من خلال أعضاء شبكتك</p>
+                
+                <h4>آخر التوزيعات</h4>
+                <table class="referrals-table">
+                    <thead>
+                        <tr>
+                            <th>العضو المصدر</th>
+                            <th>النقاط</th>
+                            <th>المستوى</th>
+                            <th>التاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-distributions">
+                        <tr>
+                            <td colspan="4" style="text-align: center;">لا توجد توزيعات حتى الآن</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-<!-- ملفات التطبيق -->
-<script type="module" src="firebase.js"></script>
-<script type="module" src="auth.js"></script>
-<script type="module" src="dashboard.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="dashboard.js"></script>
 
     <script>
         // مشاركة على وسائل التواصل
@@ -163,6 +150,4 @@
         });
     </script>
 </body>
-</html>
-
-
+    </html>
