@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل توزيع النقاط - نظام الإحالة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="container dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="user-info">
+                    <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
+                    <div class="user-details">
+                        <span id="username">مستخدم</span>
+                        <span class="user-rank" id="user-rank-display">مرتبة: مشرف</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" id="notifications-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="header-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="dashboard-nav">
+            <div class="nav-brand">
+                <i class="fas fa-network-wired"></i>
+                <span>نظام الإحالة</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>لوحة التحكم</span>
+                </a>
+                <a href="network.html" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    <span>شبكتي</span>
+                </a>
+                <a href="management.html" class="nav-link">
+                    <i class="fas fa-users-cog"></i>
+                    <span>الإدارة</span>
+                </a>
+                <a href="admin.html" class="nav-link">
+                    <i class="fas fa-user-shield"></i>
+                    <span>لوحة المشرفين</span>
+                </a>
+                <a href="distribution.html" class="nav-link active">
+                    <i class="fas fa-share-alt"></i>
+                    <span>توزيع النقاط</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="dashboard-main">
+            <div class="welcome-banner">
+                <div class="banner-content">
+                    <h1>سجل توزيع النقاط، <span id="banner-username">مستخدم</span>!</h1>
+                    <p>عرض سجل توزيع النقاط بين المستخدمين في النظام</p>
+                </div>
+                <div class="banner-actions">
+                    <button class="banner-btn primary" id="refresh-data-btn">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث البيانات
+                    </button>
+                    <button class="banner-btn secondary" id="back-to-admin-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        العودة للإدارة
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-share-alt"></i> سجل توزيع النقاط</h2>
+                    <div class="header-controls">
+                        <div class="search-box">
+                            <input type="text" placeholder="ابحث بالاسم..." id="distribution-search">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select class="page-filter" id="distribution-level-filter">
+                            <option value="">جميع المستويات</option>
+                            <option value="1">المستوى 1</option>
+                            <option value="2">المستوى 2</option>
+                            <option value="3">المستوى 3</option>
+                            <option value="4">المستوى 4</option>
+                            <option value="5">المستوى 5</option>
+                            <option value="6">المستوى 6</option>
+                            <option value="7">المستوى 7</option>
+                            <option value="8">المستوى 8</option>
+                            <option value="9">المستوى 9</option>
+                            <option value="10">المستوى 10</option>
+                        </select>
+                        <select class="page-filter" id="distribution-date-filter">
+                            <option value="">جميع التواريخ</option>
+                            <option value="today">اليوم</option>
+                            <option value="week">هذا الأسبوع</option>
+                            <option value="month">هذا الشهر</option>
+                        </select>
+                        <select class="page-filter" id="logs-per-page">
+                            <option value="10" selected>10 سجلات/صفحة</option>
+                            <option value="20">20 سجلات/صفحة</option>
+                            <option value="50">50 سجلات/صفحة</option>
+                            <option value="100">100 سجلات/صفحة</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="alert" id="distribution-alert"></div>
+                    
+                    <div class="stats-overview">
+                        <div class="stat-item">
+                            <span class="stat-label">إجمالي النقاط الموزعة:</span>
+                            <span class="stat-value" id="total-distributed-points">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">عدد عمليات التوزيع:</span>
+                            <span class="stat-value" id="total-distributions">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">أعلى توزيع:</span>
+                            <span class="stat-value" id="highest-distribution">0</span>
+                        </div>
+                    </div>
+                    
+                    <div style="overflow-x: auto;">
+                        <table class="distribution-table">
+                            <thead>
+                                <tr>
+                                    <th>المستخدم المصدر</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>المستخدم المستفيد</th>
+                                    <th>بريد المستفيد</th>
+                                    <th>النقاط</th>
+                                    <th>المستوى</th>
+                                    <th>النسبة</th>
+                                    <th>المشرف</th>
+                                    <th>التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="distribution-logs-table">
+                                <tr>
+                                    <td colspan="9" style="text-align: center;">جاري تحميل البيانات...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- عناصر الترقيم -->
+                    <div class="pagination-container" id="distribution-pagination-container">
+                        <div class="pagination-info" id="distribution-pagination-info"></div>
+                        <div class="pagination-controls">
+                            <button class="btn primary" id="distribution-pagination-prev">
+                                <i class="fas fa-chevron-right"></i> السابق
+                            </button>
+                            <div class="pagination-pages" id="distribution-pagination-pages"></div>
+                            <button class="btn primary" id="distribution-pagination-next">
+                                التالي <i class="fas fa-chevron-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="distribution.js"></script>
+</body>
+  </html>
