@@ -47,7 +47,7 @@ class RegisterManager {
     }
   }
 
-  async processReferral(referralCode, newUserId, name, email) {
+  async processReferral(referralCode, newUserId, name, email, phone, address) {
     try {
       const referrerId = await this.getUserIdFromReferralCode(referralCode);
       if (!referrerId) return;
@@ -55,6 +55,8 @@ class RegisterManager {
       await set(ref(database, `userReferrals/${referrerId}/${newUserId}`), {
         name: name,
         email: email,
+        phone: phone,
+        address: address,
         joinDate: new Date().toISOString(),
         level: 1
       });
@@ -79,7 +81,7 @@ class RegisterManager {
     const referralCode = document.getElementById('referral-code').value;
     const alert = document.getElementById('register-alert');
     
-    if (!name || !email || !phone || !password) {
+    if (!name || !email || !password || !phone || !address) {
       authManager.showAlert(alert, 'error', 'يرجى ملء جميع الحقول الإلزامية');
       return;
     }
@@ -112,7 +114,7 @@ class RegisterManager {
       
       // إذا كان هناك رمز إحالة، إضافة العلاقة
       if (referralCode) {
-        await this.processReferral(referralCode, userId, name, email);
+        await this.processReferral(referralCode, userId, name, email, phone, address);
       }
       
       authManager.showAlert(alert, 'success', 'تم إنشاء الحساب بنجاح');
