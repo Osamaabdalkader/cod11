@@ -5,77 +5,227 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة المجموعة - نظام الإحالة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="management.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="user-info">
-                <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
-                <span id="username">مستخدم</span>
+    <div class="container dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="user-info">
+                    <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
+                    <div class="user-details">
+                        <span id="username">مستخدم</span>
+                        <span class="user-rank" id="user-rank-display">مرتبة: مبتدئ</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" id="notifications-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="header-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
             </div>
-            <h1><i class="fas fa-users-cog"></i> إدارة المجموعة</h1>
-            <p>إدارة وتتبع أعضاء شبكتك بشكل كامل</p>
         </header>
         
-        <div class="tabs">
-            <div class="tab" onclick="window.location.href='index.html'">الرئيسية</div>
-            <div class="tab" onclick="window.location.href='dashboard.html'">لوحة التحكم</div>
-            <div class="tab" onclick="window.location.href='network.html'">شبكتي</div>
-            <div class="tab active">الإدارة</div>
-            <div class="tab" id="logout-btn">تسجيل الخروج</div>
-        </div>
-        
-        <div class="tab-content active">
-            <h2>إدارة أعضاء الشبكة</h2>
-            <p>من هنا يمكنك إدارة جميع أفراد شبكتك وتتبع أدائهم.</p>
-            
-            <div class="filters">
-                <select class="filter-select">
-                    <option value="">جميع الأعضاء</option>
-                    <option value="direct">الإحالات المباشرة فقط</option>
-                    <option value="level">حسب المستوى</option>
-                </select>
+        <nav class="dashboard-nav">
+            <div class="nav-brand">
+                <i class="fas fa-network-wired"></i>
+                <span>نظام الإحالة</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>لوحة التحكم</span>
+                </a>
+                <a href="network.html" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    <span>شبكتي</span>
+                </a>
+                <a href="management.html" class="nav-link active">
+                    <i class="fas fa-users-cog"></i>
+                    <span>الإدارة</span>
+                </a>
+                <a href="admin.html" class="nav-link admin-only">
+                    <i class="fas fa-user-shield"></i>
+                    <span>لوحة المشرفين</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="dashboard-main">
+            <div class="welcome-banner">
+                <div class="banner-content">
+                    <h1>إدارة المجموعة، <span id="banner-username">مستخدم</span>!</h1>
+                    <p>إدارة وتتبع أعضاء شبكتك بشكل كامل مع إمكانية البحث والتصفية</p>
+                </div>
+                <div class="banner-actions">
+                    <button class="banner-btn primary">
+                        <i class="fas fa-download"></i>
+                        تصدير البيانات
+                    </button>
+                    <button class="banner-btn secondary">
+                        <i class="fas fa-sync-alt"></i>
+                        تحديث
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-members">0</h3>
+                        <p>إجمالي الأعضاء</p>
+                    </div>
+                    <div class="stat-trend up">+5%</div>
+                </div>
                 
-                <input type="text" placeholder="ابحث بالاسم أو البريد">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="direct-members">0</h3>
+                        <p>الإحالات المباشرة</p>
+                    </div>
+                    <div class="stat-trend up">+3%</div>
+                </div>
                 
-                <button><i class="fas fa-filter"></i> تطبيق الفلتر</button>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-points">0</h3>
+                        <p>إجمالي النقاط</p>
+                    </div>
+                    <div class="stat-trend up">+12%</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="average-rank">0</h3>
+                        <p>متوسط المرتبة</p>
+                    </div>
+                    <div class="stat-trend up">+2%</div>
+                </div>
             </div>
-            
-            <div style="overflow-x: auto;">
-                <table class="referrals-table">
-                    <thead>
-                        <tr>
-                            <th>الاسم</th>
-                            <th>البريد الإلكتروني</th>
-                            <th>المستوى</th>
-                            <th>تاريخ الانضمام</th>
-                            <th>الإحالات</th>
-                            <th>النقاط</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="network-members">
-                        <tr>
-                            <td colspan="7" style="text-align: center;">جاري تحميل البيانات...</td>
-                        </tr>
-                    </tbody>
-                </table>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-users-cog"></i> إدارة أعضاء الشبكة</h2>
+                    <div class="header-controls">
+                        <div class="search-box">
+                            <input type="text" placeholder="ابحث بالاسم أو البريد..." id="members-search">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select class="page-filter" id="members-per-page">
+                            <option value="10">10</option>
+                            <option value="25" selected>25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="filters-container">
+                        <div class="filter-group">
+                            <label for="filter-type">نوع العضو</label>
+                            <select class="filter-select" id="filter-type">
+                                <option value="">جميع الأعضاء</option>
+                                <option value="direct">الإحالات المباشرة فقط</option>
+                                <option value="indirect">الإحالات غير المباشرة</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="filter-level">المستوى</label>
+                            <select class="filter-select" id="filter-level">
+                                <option value="">جميع المستويات</option>
+                                <option value="0">مبتدئ</option>
+                                <option value="1">عضو</option>
+                                <option value="2">عضو متميز</option>
+                                <option value="3">عضو نشيط</option>
+                                <option value="4">عضو فعال</option>
+                                <option value="5">عضو برونزي</option>
+                                <option value="6">عضو فضي</option>
+                                <option value="7">عضو ذهبي</option>
+                                <option value="8">عضو بلاتيني</option>
+                                <option value="9">عضو ماسي</option>
+                                <option value="10">قائد</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="filter-sort">ترتيب حسب</label>
+                            <select class="filter-select" id="filter-sort">
+                                <option value="joinDate">تاريخ الانضمام</option>
+                                <option value="points">النقاط</option>
+                                <option value="name">الاسم</option>
+                                <option value="referrals">عدد الإحالات</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn primary filter-btn" id="apply-filters">
+                            <i class="fas fa-filter"></i> تطبيق الفلتر
+                        </button>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table" id="members-table">
+                            <thead>
+                                <tr>
+                                    <th data-sort="name">الاسم</th>
+                                    <th data-sort="email">البريد الإلكتروني</th>
+                                    <th data-sort="level">المستوى</th>
+                                    <th data-sort="joinDate">تاريخ الانضمام</th>
+                                    <th data-sort="referrals">الإحالات</th>
+                                    <th data-sort="points">النقاط</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="network-members">
+                                <tr>
+                                    <td colspan="7" class="loading-row">
+                                        <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="table-footer">
+                        <div class="table-info" id="members-info">عرض 0 إلى 0 من 0 إدخالات</div>
+                        <div class="pagination" id="members-pagination">
+                            <button class="pagination-btn" id="members-prev" disabled>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <div class="pagination-pages" id="members-pages"></div>
+                            <button class="pagination-btn" id="members-next" disabled>
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div style="margin-top: 20px; text-align: center;">
-                <button><i class="fas fa-chevron-right"></i></button>
-                <span style="margin: 0 10px;">الصفحة 1 من 1</span>
-                <button><i class="fas fa-chevron-left"></i></button>
-            </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Firebase SDK -->
-<!-- ملفات التطبيق -->
-<script type="module" src="firebase.js"></script>
-<script type="module" src="auth.js"></script>
-<script type="module" src="management.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="management.js"></script>
 </body>
-</html>
-
+    </html>
