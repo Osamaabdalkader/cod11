@@ -478,6 +478,12 @@
   border: 1px solid rgba(249, 65, 68, 0.3);
 }
 
+.alert-info {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
 .users-table {
   width: 100%;
   border-collapse: collapse;
@@ -571,6 +577,128 @@
   background: linear-gradient(to right, rgba(67, 97, 238, 0.05), transparent);
 }
 
+/* أنماط الترقيم */
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 15px 0;
+  border-top: 1px solid var(--gray-light);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.pagination-info {
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-pages {
+  display: flex;
+  gap: 5px;
+}
+
+.pagination-page {
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  background: white;
+  color: var(--dark);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.pagination-page:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.pagination-page.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.pagination-ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  color: var(--gray);
+}
+
+/* إضافة أنماط خاصة بصفحة توزيع النقاط */
+
+.stats-overview {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  background: var(--light);
+  padding: 15px;
+  border-radius: var(--border-radius);
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.distribution-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.distribution-table th {
+  background: var(--light);
+  padding: 12px 16px;
+  text-align: right;
+  font-weight: 600;
+  color: var(--dark);
+  white-space: nowrap;
+}
+
+.distribution-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.distribution-table tr:last-child td {
+  border-bottom: none;
+}
+
+.distribution-table tr:hover td {
+  background: #f8f9fa;
+}
+
 /* التجاوب مع الشاشات المختلفة */
 @media (max-width: 1200px) {
   .dashboard-container {
@@ -634,6 +762,24 @@
   .search-filters select {
     width: 100%;
   }
+  
+  .pagination-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .pagination-controls {
+    justify-content: center;
+  }
+  
+  .stats-overview {
+    flex-direction: column;
+  }
+  
+  .stat-item {
+    min-width: auto;
+  }
 }
 
 @media (max-width: 768px) {
@@ -661,6 +807,27 @@
     padding: 4px 8px;
     font-size: 0.8rem;
   }
+  
+  .pagination-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .pagination-pages {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .distribution-table {
+    font-size: 0.85rem;
+  }
+  
+  .distribution-table th,
+  .distribution-table td {
+    padding: 8px 10px;
+  }
 }
 
 @media (max-width: 576px) {
@@ -679,6 +846,26 @@
   }
   
   .users-table {
+    display: block;
+    overflow-x: auto;
+  }
+  
+  .header-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  
+  .header-controls .search-box,
+  .header-controls .page-filter {
+    width: 100%;
+  }
+  
+  .header-controls .search-box input {
+    width: 100%;
+  }
+  
+  .distribution-table {
     display: block;
     overflow-x: auto;
   }
@@ -763,4 +950,32 @@ body.rank-10 { --primary: #4a0c7a; --secondary: #3a0a61; }
   .user-badge.level-8 { background: #595959; color: #f5f5f5; }
   .user-badge.level-9 { background: #004b66; color: #66d9ff; }
   .user-badge.level-10 { background: #3a0a61; color: #b38cff; }
-}
+  
+  .pagination-page {
+    background: #2b3035;
+    border-color: #495057;
+    color: #f8f9fa;
+  }
+  
+  .pagination-page.active {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .stat-item {
+    background: #2b3035;
+  }
+  
+  .stat-label {
+    color: #adb5bd;
+  }
+  
+  .distribution-table th {
+    background: #2b3035;
+    color: #f8f9fa;
+  }
+  
+  .distribution-table tr:hover td {
+    background: #3a4046;
+  }
+    }
