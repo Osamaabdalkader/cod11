@@ -6,13 +6,6 @@
     <title>إنشاء حساب - نظام الإحالة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <style>
-        .optional-field {
-            opacity: 0.8;
-            border-left: 3px solid #4CAF50;
-            padding-left: 10px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -24,31 +17,31 @@
         <div class="tab-content active">
             <form id="register-form">
                 <div class="form-group">
-                    <label for="register-name">الاسم الكامل</label>
+                    <label for="register-name">الاسم الكامل *</label>
                     <input type="text" id="register-name" placeholder="أدخل اسمك الكامل" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="register-email">البريد الإلكتروني</label>
+                    <label for="register-email">البريد الإلكتروني *</label>
                     <input type="email" id="register-email" placeholder="أدخل بريدك الإلكتروني" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="register-phone">رقم الهاتف</label>
+                    <label for="register-phone">رقم الهاتف *</label>
                     <input type="tel" id="register-phone" placeholder="أدخل رقم هاتفك" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="register-address">العنوان</label>
-                    <textarea id="register-address" placeholder="أدخل عنوانك" rows="2"></textarea>
+                    <label for="register-address">العنوان *</label>
+                    <textarea id="register-address" placeholder="أدخل عنوانك بالتفصيل" rows="3" required></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <label for="register-password">كلمة المرور</label>
+                    <label for="register-password">كلمة المرور *</label>
                     <input type="password" id="register-password" placeholder="أنشئ كلمة مرور قوية" required>
                 </div>
                 
-                <div class="form-group optional-field">
+                <div class="form-group">
                     <label for="referral-code">رمز الإحالة (اختياري)</label>
                     <input type="text" id="referral-code" placeholder="أدخل رمز الإحالة إذا كان لديك">
                 </div>
@@ -68,8 +61,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <!-- ملفات التطبيق -->
     <script type="module" src="firebase.js"></script>
     <script type="module" src="auth.js"></script>
     <script type="module" src="register.js"></script>
@@ -83,4 +74,4 @@
         }
     </script>
 </body>
-                        </html>
+</html>
