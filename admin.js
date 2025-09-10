@@ -1,4 +1,4 @@
-// admin.js
+// admin.js - الإصدار المحدث مع دعم التصميم الجديد
 import { auth, database, ref, get, update } from './firebase.js';
 import { getAllUsers, searchUsers, addPointsToUser, checkAdminStatus } from './firebase.js';
 import { authManager } from './auth.js';
@@ -46,7 +46,7 @@ class AdminManager {
     
     this.setupEventListeners();
     this.loadAllUsers();
-    this.setupDistributionTab();
+    this.loadAdminStats();
   }
 
   async loadCurrentUserData() {
@@ -60,24 +60,82 @@ class AdminManager {
         // تحديث واجهة المستخدم
         const usernameEl = document.getElementById('username');
         const userAvatar = document.getElementById('user-avatar');
+        const bannerUsername = document.getElementById('banner-username');
+        const userRankDisplay = document.getElementById('user-rank-display');
         
         if (usernameEl) usernameEl.textContent = userData.name;
+        if (bannerUsername) bannerUsername.textContent = userData.name;
         if (userAvatar) userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=random`;
+        
+        // تحديث عرض المرتبة
+        const rankTitles = [
+          "مبتدئ", "عضو", "عضو متميز", "عضو نشيط", "عضو فعال",
+          "عضو برونزي", "عضو فضي", "عضو ذهبي", "عضو بلاتيني", "عضو ماسي", "قائد"
+        ];
+        const currentRank = userData.rank || 0;
+        if (userRankDisplay) userRankDisplay.textContent = `مرتبة: ${rankTitles[currentRank]}`;
+        
+        // تطبيق سمة المرتبة
+        this.applyRankTheme(currentRank);
       }
     } catch (error) {
       console.error("Error loading current user data:", error);
     }
   }
 
-  setupDistributionTab() {
-    // إضافة تبويب جديد لسجل التوزيع
-    const tabsContainer = document.querySelector('.tabs');
-    if (tabsContainer) {
-      const distributionTab = document.createElement('div');
-      distributionTab.className = 'tab';
-      distributionTab.innerHTML = '<i class="fas fa-share-alt"></i> توزيع النقاط';
-      distributionTab.onclick = () => this.showDistributionHistory();
-      tabsContainer.appendChild(distributionTab);
+  applyRankTheme(rank) {
+    // إضافة كلاس المرتبة إلى body لتطبيق أنماط الألوان
+    document.body.classList.remove('rank-0', 'rank-1', 'rank-2', 'rank-3', 'rank-4', 
+                                  'rank-5', 'rank-6', 'rank-7', 'rank-8', 'rank-9', 'rank-10');
+    document.body.classList.add(`rank-${rank}`);
+    
+    // تحديث ألوان الشعار حسب المرتبة
+    const navBrandIcon = document.querySelector('.nav-brand i');
+    if (navBrandIcon) {
+      navBrandIcon.style.color = `var(--primary)`;
+    }
+  }
+
+  async loadAdminStats() {
+    try {
+      const users = await getAllUsers();
+      
+      let totalUsers = 0;
+      let totalAdmins = 0;
+      let totalPoints = 0;
+      let highestRank = 0;
+      
+      for (const userId in users) {
+        const user = users[userId];
+        totalUsers++;
+        
+        if (user.isAdmin) {
+          totalAdmins++;
+        }
+        
+        totalPoints += user.points || 0;
+        highestRank = Math.max(highestRank, user.rank || 0);
+      }
+      
+      // تحديث واجهة المستخدم بالإحصائيات
+      const totalUsersEl = document.getElementById('total-users');
+      const totalAdminsEl = document.getElementById('total-admins');
+      const totalPointsEl = document.getElementById('total-points');
+      const highestRankEl = document.getElementById('highest-rank');
+      
+      if (totalUsersEl) totalUsersEl.textContent = this.formatNumber(totalUsers);
+      if (totalAdminsEl) totalAdminsEl.textContent = this.formatNumber(totalAdmins);
+      if (totalPointsEl) totalPointsEl.textContent = this.formatNumber(totalPoints);
+      
+      // تحويل الرقم إلى اسم المرتبة
+      const rankTitles = [
+        "مبتدئ", "عضو", "عضو متميز", "عضو نشيط", "عضو فعال",
+        "عضو برونزي", "عضو فضي", "عضو ذهبي", "عضو بلاتيني", "عضو ماسي", "قائد"
+      ];
+      if (highestRankEl) highestRankEl.textContent = rankTitles[highestRank] || "غير معروف";
+      
+    } catch (error) {
+      console.error("Error loading admin stats:", error);
     }
   }
 
@@ -189,8 +247,9 @@ class AdminManager {
       await addPointsToUser(userId, pointsToAdd, this.currentUser.uid);
       this.showSuccess(`تم إضافة ${pointsToAdd} نقطة للمستخدم بنجاح`);
       
-      // تحديث القائمة
+      // تحديث القائمة والإحصائيات
       this.loadAllUsers();
+      this.loadAdminStats();
     } catch (error) {
       console.error("Error adding points:", error);
       this.showError(error.message || "فشل في إضافة النقاط");
@@ -214,14 +273,6 @@ class AdminManager {
 
   setupEventListeners() {
     // زر البحث
-    const searchBtn = document.getElementById('admin-search-btn');
-    if (searchBtn) {
-      searchBtn.addEventListener('click', () => {
-        this.searchUsers();
-      });
-    }
-
-    // البحث أثناء الكتابة
     const searchInput = document.getElementById('admin-search');
     if (searchInput) {
       searchInput.addEventListener('keyup', () => {
@@ -234,6 +285,14 @@ class AdminManager {
     if (rankFilter) {
       rankFilter.addEventListener('change', () => {
         this.searchUsers();
+      });
+    }
+
+    // زر عرض سجل التوزيع
+    const showDistributionBtn = document.getElementById('show-distribution-btn');
+    if (showDistributionBtn) {
+      showDistributionBtn.addEventListener('click', () => {
+        this.showDistributionHistory();
       });
     }
 
@@ -418,6 +477,10 @@ class AdminManager {
         alertDiv.style.display = 'none';
       }, 5000);
     }
+  }
+
+  formatNumber(num) {
+    return new Intl.NumberFormat('ar-SA').format(num);
   }
 }
 
