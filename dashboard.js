@@ -205,8 +205,6 @@ class DashboardManager {
     }
   }
 
-  
-
   async loadReferralsData(userId) {
     try {
       const referralsRef = ref(database, 'userReferrals/' + userId);
@@ -575,62 +573,6 @@ class DashboardManager {
       `;
     } catch (error) {
       console.error("Error loading rank info:", error);
-    }
-  }
-
-  async calculateEarnedPoints(userId) {
-    try {
-      const logsRef = ref(database, 'pointDistributionLogs');
-      const snapshot = await get(logsRef);
-      
-      if (!snapshot.exists()) return 0;
-      
-      const logs = snapshot.val();
-      let totalPoints = 0;
-      
-      // البحث في جميع السجلات عن تلك التي يكون targetUserId هو المستخدم الحالي
-      for (const logId in logs) {
-        const log = logs[logId];
-        if (log.targetUserId === userId) {
-          totalPoints += log.points || 0;
-        }
-      }
-      
-      const earnedPointsEl = document.getElementById('earned-points');
-      if (earnedPointsEl) earnedPointsEl.textContent = this.formatNumber(totalPoints);
-      
-      return totalPoints;
-    } catch (error) {
-      console.error("Error calculating earned points:", error);
-      return 0;
-    }
-  }
-
-  async countBenefitedMembers(userId) {
-    try {
-      const logsRef = ref(database, 'pointDistributionLogs');
-      const snapshot = await get(logsRef);
-      
-      if (!snapshot.exists()) return 0;
-      
-      const logs = snapshot.val();
-      const uniqueMembers = new Set();
-      
-      // البحث في جميع السجلات عن تلك التي يكون targetUserId هو المستخدم الحالي
-      for (const logId in logs) {
-        const log = logs[logId];
-        if (log.targetUserId === userId) {
-          uniqueMembers.add(log.sourceUserId);
-        }
-      }
-      
-      const benefitedMembersEl = document.getElementById('benefited-members');
-      if (benefitedMembersEl) benefitedMembersEl.textContent = this.formatNumber(uniqueMembers.size);
-      
-      return uniqueMembers.size;
-    } catch (error) {
-      console.error("Error counting benefited members:", error);
-      return 0;
     }
   }
 
