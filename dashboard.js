@@ -1,4 +1,4 @@
-// dashboard.js - الإصدار المعدل مع إصلاح الإحصائيات
+// dashboard.js - الإصدار المعدل لمنصة تسريع
 import { auth, database, ref, get, onValue, query, orderByChild, equalTo } from './firebase.js';
 import { checkPromotions, setupRankChangeListener, checkAdminStatus } from './firebase.js';
 import { authManager } from './auth.js';
@@ -61,7 +61,9 @@ class DashboardManager {
       const usernameEl = document.getElementById('username');
       const userAvatar = document.getElementById('user-avatar');
       const pointsCount = document.getElementById('points-count');
-      const joinDate = document.getElementById('join-date');
+      const userEmail = document.getElementById('user-email');
+      const userPhone = document.getElementById('user-phone');
+      const userAddress = document.getElementById('user-address');
       const referralLink = document.getElementById('referral-link');
       const referralCodeDisplay = document.getElementById('referral-code-display');
       const bannerUsername = document.getElementById('banner-username');
@@ -71,7 +73,9 @@ class DashboardManager {
       if (bannerUsername) bannerUsername.textContent = this.userData.name;
       if (userAvatar) userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userData.name)}&background=random`;
       if (pointsCount) pointsCount.textContent = this.formatNumber(this.userData.points || 0);
-      if (joinDate) joinDate.textContent = new Date(this.userData.joinDate).toLocaleDateString('ar-SA');
+      if (userEmail) userEmail.textContent = this.userData.email || 'غير محدد';
+      if (userPhone) userPhone.textContent = this.userData.phone || 'غير محدد';
+      if (userAddress) userAddress.textContent = this.userData.address || 'غير محدد';
       if (referralLink) referralLink.value = `${window.location.origin}${window.location.pathname}?ref=${this.userData.referralCode}`;
       if (referralCodeDisplay) referralCodeDisplay.textContent = this.userData.referralCode || 'N/A';
       
@@ -262,7 +266,7 @@ class DashboardManager {
     if (!referralsTable) return;
     
     if (this.referralsData.length === 0) {
-      referralsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد إحالات حتى الآن</td></tr>';
+      referralsTable.innerHTML = '<tr><td colspan="5" style="text-align: center;">لا توجد أعضاء حتى الآن</td></tr>';
       if (referralsInfo) referralsInfo.textContent = 'عرض 0 إلى 0 من 0 إدخالات';
       this.renderReferralsPagination();
       return;
@@ -275,7 +279,8 @@ class DashboardManager {
     if (searchTerm) {
       filteredData = this.referralsData.filter(item => 
         (item.name && item.name.toLowerCase().includes(searchTerm)) || 
-        (item.email && item.email.toLowerCase().includes(searchTerm))
+        (item.email && item.email.toLowerCase().includes(searchTerm)) ||
+        (item.phone && item.phone.toLowerCase().includes(searchTerm))
       );
     }
     
@@ -288,13 +293,14 @@ class DashboardManager {
     referralsTable.innerHTML = '';
     
     if (pageData.length === 0) {
-      referralsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد نتائج</td></tr>';
+      referralsTable.innerHTML = '<tr><td colspan="5" style="text-align: center;">لا توجد نتائج</td></tr>';
     } else {
       pageData.forEach((referral) => {
         const row = referralsTable.insertRow();
         row.innerHTML = `
           <td>${referral.name || 'غير معروف'}</td>
           <td>${referral.email || 'غير معروف'}</td>
+          <td>${referral.phone || 'غير معروف'}</td>
           <td>${new Date(referral.joinDate).toLocaleDateString('ar-SA')}</td>
           <td><span class="user-badge">نشط</span></td>
         `;
@@ -759,7 +765,7 @@ class DashboardManager {
     const shareTwitter = document.getElementById('share-twitter');
     if (shareTwitter) {
       shareTwitter.addEventListener('click', () => {
-        const text = encodeURIComponent('انضم إلى هذا الموقع الرائع عبر رابط الإحالة الخاص بي!');
+        const text = encodeURIComponent('انضم إلى منصة تسريع للتسويق الإلكتروني عبر رابط التسريع الخاص بي!');
         const url = encodeURIComponent(document.getElementById('referral-link').value);
         window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
       });
@@ -769,7 +775,7 @@ class DashboardManager {
     const shareWhatsapp = document.getElementById('share-whatsapp');
     if (shareWhatsapp) {
       shareWhatsapp.addEventListener('click', () => {
-        const text = encodeURIComponent('انضم إلى هذا الموقع الرائع عبر رابط الإحالة الخاص بي: ');
+        const text = encodeURIComponent('انضم إلى منصة تسريع للتسويق الإلكتروني عبر رابط التسريع الخاص بي: ');
         const url = encodeURIComponent(document.getElementById('referral-link').value);
         window.open(`https://wa.me/?text=${text}${url}`, '_blank');
       });
