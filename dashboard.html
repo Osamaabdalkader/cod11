@@ -9,262 +9,286 @@
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-    <!-- الأيقونات العائمة للمراتب -->
-    <div class="floating-rank-icons">
-        <div class="floating-icon rank-10" data-rank="10">
-            <i class="fas fa-crown"></i>
-            <span class="rank-tooltip">قائد</span>
-        </div>
-        <div class="floating-icon rank-9" data-rank="9">
-            <i class="fas fa-gem"></i>
-            <span class="rank-tooltip">ماسي</span>
-        </div>
-        <div class="floating-icon rank-8" data-rank="8">
-            <i class="fas fa-award"></i>
-            <span class="rank-tooltip">بلاتيني</span>
-        </div>
-        <div class="floating-icon rank-7" data-rank="7">
-            <i class="fas fa-medal"></i>
-            <span class="rank-tooltip">ذهبي</span>
-        </div>
-    </div>
-
     <div class="container dashboard-container">
         <header class="dashboard-header">
-            <div class="user-info">
-                <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
-                <span id="username">مستخدم</span>
+            <div class="header-content">
+                <div class="user-info">
+                    <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
+                    <div class="user-details">
+                        <span id="username">مستخدم</span>
+                        <span class="user-rank" id="user-rank-display">مرتبة: مبتدئ</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" id="notifications-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="header-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
             </div>
-            <h1><i class="fas fa-tachometer-alt"></i> لوحة التحكم</h1>
-            <p>مرحبًا بك في لوحة تحكم نظام الإحالة</p>
         </header>
         
-        <div class="tabs">
-            <div class="tab" onclick="window.location.href='index.html'">الرئيسية</div>
-            <div class="tab active">لوحة التحكم</div>
-            <div class="tab" onclick="window.location.href='network.html'">شبكتي</div>
-            <div class="tab admin-only" onclick="window.location.href='admin.html'">
-                <i class="fas fa-user-shield"></i> لوحة المشرفين
+        <nav class="dashboard-nav">
+            <div class="nav-brand">
+                <i class="fas fa-network-wired"></i>
+                <span>نظام الإحالة</span>
             </div>
-            <div class="tab" onclick="window.location.href='management.html'">الإدارة</div>
-            <div class="tab" id="logout-btn">تسجيل الخروج</div>
-        </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="dashboard.html" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>لوحة التحكم</span>
+                </a>
+                <a href="network.html" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    <span>شبكتي</span>
+                </a>
+                <a href="management.html" class="nav-link">
+                    <i class="fas fa-users-cog"></i>
+                    <span>الإدارة</span>
+                </a>
+                <a href="admin.html" class="nav-link admin-only">
+                    <i class="fas fa-user-shield"></i>
+                    <span>لوحة المشرفين</span>
+                </a>
+            </div>
+        </nav>
 
-        <div class="tab-content active">
-            <!-- بطاقات الإحصائيات -->
-            <div class="dashboard-stats">
-                <div class="stat-card premium">
+        <main class="dashboard-main">
+            <div class="welcome-banner">
+                <div class="banner-content">
+                    <h1>مرحباً بعودتك، <span id="banner-username">مستخدم</span>!</h1>
+                    <p>هنا يمكنك متابعة أدائك وإدارة شبكة الإحالات الخاصة بك</p>
+                </div>
+                <div class="banner-actions">
+                    <button class="banner-btn primary">
+                        <i class="fas fa-plus"></i>
+                        إحالة جديدة
+                    </button>
+                    <button class="banner-btn secondary">
+                        <i class="fas fa-chart-line"></i>
+                        عرض التقارير
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="referrals-count">0</div>
-                        <div class="stat-label">إجمالي الإحالات</div>
+                    <div class="stat-info">
+                        <h3 id="referrals-count">0</h3>
+                        <p>إجمالي الإحالات</p>
                     </div>
-                    <div class="stat-badge">+5%</div>
+                    <div class="stat-trend up">+5%</div>
                 </div>
                 
-                <div class="stat-card premium">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-gift"></i>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="points-count">0</div>
-                        <div class="stat-label">نقاط المكافآت</div>
+                    <div class="stat-info">
+                        <h3 id="points-count">0</h3>
+                        <p>نقاط المكافآت</p>
                     </div>
-                    <div class="stat-badge">+12%</div>
+                    <div class="stat-trend up">+12%</div>
                 </div>
                 
-                <div class="stat-card premium">
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="join-date">-</div>
-                        <div class="stat-label">تاريخ الانضمام</div>
-                    </div>
-                </div>
-                
-                <div class="stat-card premium">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-coins"></i>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="earned-points">0</div>
-                        <div class="stat-label">النقاط من الشبكة</div>
+                    <div class="stat-info">
+                        <h3 id="earned-points">0</h3>
+                        <p>النقاط من الشبكة</p>
                     </div>
-                    <div class="stat-badge">+8%</div>
+                    <div class="stat-trend up">+8%</div>
                 </div>
                 
-                <div class="stat-card premium">
+                <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-user-friends"></i>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number" id="benefited-members">0</div>
-                        <div class="stat-label">أعضاء استفدت منهم</div>
+                    <div class="stat-info">
+                        <h3 id="benefited-members">0</h3>
+                        <p>أعضاء استفدت منهم</p>
                     </div>
-                    <div class="stat-badge">+3%</div>
+                    <div class="stat-trend up">+3%</div>
                 </div>
             </div>
 
-            <!-- قسم رابط الإحالة المطور -->
-            <div class="referral-section premium-card"> 
-                <div class="section-header">
-                    <h3><i class="fas fa-share-alt"></i> رابط الإحالة الخاص بك</h3>
-                    <div class="header-actions">
-                        <button class="action-btn" id="refresh-link">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <p>شارك هذا الرابط مع أصدقائك لتحصل على نقاط مكافآت عند انضمامهم.</p>
-                
-                <div class="referral-container">
-                    <div class="referral-link-container">
-                        <input type="text" id="referral-link" readonly>
-                        <button class="copy-btn premium" id="copy-link-btn">
-                            <i class="fas fa-copy"></i> نسخ الرابط
-                        </button>
-                    </div>
-                    
-                    <div class="referral-code-container">
-                        <div class="code-display">
-                            <span id="referral-code-display">Loading...</span>
-                            <button class="copy-btn small" id="copy-code-btn">
-                                <i class="fas fa-copy"></i>
+            <div class="dashboard-content">
+                <div class="content-col main-col">
+                    <div class="card referral-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-share-alt"></i> رابط الإحالة الخاص بك</h2>
+                            <button class="icon-btn" id="refresh-link">
+                                <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
-                        <span class="code-label">كود الإحالة الخاص بك</span>
+                        <div class="card-body">
+                            <p class="card-description">شارك هذا الرابط مع أصدقائك لتحصل على نقاط مكافآت عند انضمامهم.</p>
+                            
+                            <div class="referral-input-group">
+                                <input type="text" id="referral-link" readonly>
+                                <button class="btn primary" id="copy-link-btn">
+                                    <i class="fas fa-copy"></i> نسخ
+                                </button>
+                            </div>
+                            
+                            <div class="referral-code-group">
+                                <label>كود الإحالة:</label>
+                                <div class="code-display">
+                                    <span id="referral-code-display">Loading...</span>
+                                    <button class="icon-btn small" id="copy-code-btn">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="social-share">
+                                <p>مشاركة سريعة:</p>
+                                <div class="share-buttons">
+                                    <button class="share-btn facebook" id="share-fb">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </button>
+                                    <button class="share-btn twitter" id="share-twitter">
+                                        <i class="fab fa-twitter"></i>
+                                    </button>
+                                    <button class="share-btn whatsapp" id="share-whatsapp">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="social-share">
-                    <button class="social-btn facebook" id="share-fb">
-                        <i class="fab fa-facebook"></i> فيسبوك
-                    </button>
-                    <button class="social-btn twitter" id="share-twitter">
-                        <i class="fab fa-twitter"></i> تويتر
-                    </button>
-                    <button class="social-btn whatsapp" id="share-whatsapp">
-                        <i class="fab fa-whatsapp"></i> واتساب
-                    </button>
-                </div>
-            </div>
 
-            <!-- قسم المراتب -->
-            <div class="rank-section premium-card">
-                <div class="section-header">
-                    <h3><i class="fas fa-trophy"></i> نظام المراتب</h3>
-                </div>
-                <div id="rank-info">
-                    <div class="loading">
-                        <i class="fas fa-spinner fa-spin"></i> جاري تحميل معلومات المرتبة...
-                    </div>
-                </div>
-            </div>
-            
-            <!-- قسم أحدث الإحالات مع Pagination -->
-            <div class="referrals-section premium-card">
-                <div class="section-header">
-                    <h3><i class="fas fa-list"></i> أحدث الإحالات</h3>
-                    <div class="table-controls">
-                        <select class="page-filter" id="referrals-per-page">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="50">50</option>
-                        </select>
-                        <div class="search-box">
-                            <input type="text" placeholder="ابحث في الإحالات..." id="referrals-search">
-                            <i class="fas fa-search"></i>
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-list"></i> أحدث الإحالات</h2>
+                            <div class="header-controls">
+                                <div class="search-box">
+                                    <input type="text" placeholder="ابحث..." id="referrals-search">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <select class="page-filter" id="referrals-per-page">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table" id="referrals-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-sort="name">الاسم <i class="fas fa-sort"></i></th>
+                                            <th data-sort="email">البريد الإلكتروني <i class="fas fa-sort"></i></th>
+                                            <th data-sort="joinDate">تاريخ الانضمام <i class="fas fa-sort"></i></th>
+                                            <th>الحالة</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-referrals">
+                                        <tr>
+                                            <td colspan="4" class="loading-row">
+                                                <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-footer">
+                                <div class="table-info" id="referrals-info">عرض 0 إلى 0 من 0 إدخالات</div>
+                                <div class="pagination" id="referrals-pagination">
+                                    <button class="pagination-btn" id="referrals-prev" disabled>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <div class="pagination-pages" id="referrals-pages"></div>
+                                    <button class="pagination-btn" id="referrals-next" disabled>
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="table-container">
-                    <table class="modern-table" id="referrals-table">
-                        <thead>
-                            <tr>
-                                <th>الاسم <i class="fas fa-sort"></i></th>
-                                <th>البريد الإلكتروني <i class="fas fa-sort"></i></th>
-                                <th>تاريخ الانضمام <i class="fas fa-sort"></i></th>
-                                <th>الحالة <i class="fas fa-sort"></i></th>
-                            </tr>
-                        </thead>
-                        <tbody id="recent-referrals">
-                            <tr>
-                                <td colspan="4" style="text-align: center;">جاري تحميل البيانات...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="pagination" id="referrals-pagination">
-                    <button class="pagination-btn" id="referrals-prev">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                    <div class="pagination-pages" id="referrals-pages"></div>
-                    <button class="pagination-btn" id="referrals-next">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                </div>
-            </div>
 
-            <!-- قسم توزيع النقاط مع Pagination -->
-            <div class="distribution-section premium-card">
-                <div class="section-header">
-                    <h3><i class="fas fa-share-alt"></i> توزيع النقاط في شبكتك</h3>
-                    <div class="table-controls">
-                        <select class="page-filter" id="distribution-per-page">
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="50">50</option>
-                        </select>
-                        <div class="search-box">
-                            <input type="text" placeholder="ابحث في التوزيعات..." id="distribution-search">
-                            <i class="fas fa-search"></i>
+                <div class="content-col side-col">
+                    <div class="card rank-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-trophy"></i> مرتبتك الحالية</h2>
+                        </div>
+                        <div class="card-body">
+                            <div id="rank-info">
+                                <div class="loading-content">
+                                    <i class="fas fa-spinner fa-spin"></i> جاري تحميل معلومات المرتبة...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-share-alt"></i> توزيع النقاط</h2>
+                            <div class="header-controls">
+                                <select class="page-filter" id="distribution-per-page">
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table" id="distribution-table">
+                                    <thead>
+                                        <tr>
+                                            <th data-sort="sourceUserId">العضو المصدر <i class="fas fa-sort"></i></th>
+                                            <th data-sort="points">النقاط <i class="fas fa-sort"></i></th>
+                                            <th data-sort="level">المستوى <i class="fas fa-sort"></i></th>
+                                            <th data-sort="timestamp">التاريخ <i class="fas fa-sort"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-distributions">
+                                        <tr>
+                                            <td colspan="4" class="loading-row">
+                                                <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-footer">
+                                <div class="table-info" id="distribution-info">عرض 0 إلى 0 من 0 إدخالات</div>
+                                <div class="pagination" id="distribution-pagination">
+                                    <button class="pagination-btn" id="distribution-prev" disabled>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <div class="pagination-pages" id="distribution-pages"></div>
+                                    <button class="pagination-btn" id="distribution-next" disabled>
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <p>عرض النقاط التي حصلت عليها من خلال أعضاء شبكتك</p>
-                
-                <div class="table-container">
-                    <table class="modern-table" id="distribution-table">
-                        <thead>
-                            <tr>
-                                <th>العضو المصدر <i class="fas fa-sort"></i></th>
-                                <th>النقاط <i class="fas fa-sort"></i></th>
-                                <th>المستوى <i class="fas fa-sort"></i></th>
-                                <th>التاريخ <i class="fas fa-sort"></i></th>
-                            </tr>
-                        </thead>
-                        <tbody id="recent-distributions">
-                            <tr>
-                                <td colspan="4" style="text-align: center;">جاري تحميل البيانات...</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="pagination" id="distribution-pagination">
-                    <button class="pagination-btn" id="distribution-prev">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                    <div class="pagination-pages" id="distribution-pages"></div>
-                    <button class="pagination-btn" id="distribution-next">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script type="module" src="firebase.js"></script>
     <script type="module" src="auth.js"></script>
     <script type="module" src="dashboard.js"></script>
 </body>
-                                                                     </html>
+                                      </html>
