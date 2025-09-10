@@ -1,4 +1,4 @@
-// dashboard.js - إصدار متطور مع ديناميكية الألوان حسب المرتبة
+// dashboard.js - الإصدار المعدل مع إصلاح الإحصائيات
 import { auth, database, ref, get, onValue, query, orderByChild, equalTo } from './firebase.js';
 import { checkPromotions, setupRankChangeListener, checkAdminStatus } from './firebase.js';
 import { authManager } from './auth.js';
@@ -47,6 +47,9 @@ class DashboardManager {
         this.applyRankTheme(this.userData.rank || 0);
         this.loadReferralsData(userId);
         this.loadDistributionData(userId);
+        // تحميل الإحصائيات الإضافية
+        await this.calculateEarnedPoints(userId);
+        await this.countBenefitedMembers(userId);
       }
     } catch (error) {
       console.error("Error loading user data:", error);
@@ -133,6 +136,76 @@ class DashboardManager {
       console.error("Error loading referrals count:", error);
     }
   }
+
+  async calculateEarnedPoints(userId) {
+    try {
+      const logsRef = ref(database, 'pointDistributionLogs');
+      const snapshot = await get(logsRef);
+      
+      if (!snapshot.exists()) {
+        const earnedPointsEl = document.getElementById('earned-points');
+        if (earnedPointsEl) earnedPointsEl.textContent = '0';
+        return 0;
+      }
+      
+      const logs = snapshot.val();
+      let totalPoints = 0;
+      
+      // البحث في جميع السجلات عن تلك التي يكون targetUserId هو المستخدم الحالي
+      for (const logId in logs) {
+        const log = logs[logId];
+        if (log.targetUserId === userId) {
+          totalPoints += log.points || 0;
+        }
+      }
+      
+      const earnedPointsEl = document.getElementById('earned-points');
+      if (earnedPointsEl) earnedPointsEl.textContent = this.formatNumber(totalPoints);
+      
+      return totalPoints;
+    } catch (error) {
+      console.error("Error calculating earned points:", error);
+      const earnedPointsEl = document.getElementById('earned-points');
+      if (earnedPointsEl) earnedPointsEl.textContent = '0';
+      return 0;
+    }
+  }
+
+  async countBenefitedMembers(userId) {
+    try {
+      const logsRef = ref(database, 'pointDistributionLogs');
+      const snapshot = await get(logsRef);
+      
+      if (!snapshot.exists()) {
+        const benefitedMembersEl = document.getElementById('benefited-members');
+        if (benefitedMembersEl) benefitedMembersEl.textContent = '0';
+        return 0;
+      }
+      
+      const logs = snapshot.val();
+      const uniqueMembers = new Set();
+      
+      // البحث في جميع السجلات عن تلك التي يكون targetUserId هو المستخدم الحالي
+      for (const logId in logs) {
+        const log = logs[logId];
+        if (log.targetUserId === userId) {
+          uniqueMembers.add(log.sourceUserId);
+        }
+      }
+      
+      const benefitedMembersEl = document.getElementById('benefited-members');
+      if (benefitedMembersEl) benefitedMembersEl.textContent = this.formatNumber(uniqueMembers.size);
+      
+      return uniqueMembers.size;
+    } catch (error) {
+      console.error("Error counting benefited members:", error);
+      const benefitedMembersEl = document.getElementById('benefited-members');
+      if (benefitedMembersEl) benefitedMembersEl.textContent = '0';
+      return 0;
+    }
+  }
+
+  
 
   async loadReferralsData(userId) {
     try {
