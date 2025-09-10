@@ -57,6 +57,10 @@
                     <i class="fas fa-user-shield"></i>
                     <span>لوحة المشرفين</span>
                 </a>
+                <a href="distribution.html" class="nav-link">
+                    <i class="fas fa-share-alt"></i>
+                    <span>توزيع النقاط</span>
+                </a>
             </div>
         </nav>
 
@@ -67,11 +71,11 @@
                     <p>إدارة المستخدمين والنقاط والترقيات في النظام</p>
                 </div>
                 <div class="banner-actions">
-                    <button class="banner-btn primary">
+                    <button class="banner-btn primary" id="refresh-data-btn">
                         <i class="fas fa-sync-alt"></i>
                         تحديث البيانات
                     </button>
-                    <button class="banner-btn secondary">
+                    <button class="banner-btn secondary" id="stats-report-btn">
                         <i class="fas fa-chart-line"></i>
                         التقارير الإحصائية
                     </button>
@@ -146,6 +150,12 @@
                             <option value="9">عضو ماسي (9)</option>
                             <option value="10">قائد (10)</option>
                         </select>
+                        <select class="page-filter" id="users-per-page">
+                            <option value="5">5 مستخدمين/صفحة</option>
+                            <option value="10" selected>10 مستخدمين/صفحة</option>
+                            <option value="20">20 مستخدمين/صفحة</option>
+                            <option value="50">50 مستخدمين/صفحة</option>
+                        </select>
                     </div>
                 </div>
                 <div class="card-body">
@@ -172,6 +182,20 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- عناصر الترقيم -->
+                    <div class="pagination-container" id="pagination-container">
+                        <div class="pagination-info" id="pagination-info"></div>
+                        <div class="pagination-controls">
+                            <button class="btn primary" id="pagination-prev">
+                                <i class="fas fa-chevron-right"></i> السابق
+                            </button>
+                            <div class="pagination-pages" id="pagination-pages"></div>
+                            <button class="btn primary" id="pagination-next">
+                                التالي <i class="fas fa-chevron-left"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -181,9 +205,9 @@
                 </div>
                 <div class="card-body">
                     <p class="card-description">هنا يمكنك عرض سجل توزيع النقاط بين المستخدمين في النظام.</p>
-                    <button class="btn primary" id="show-distribution-btn">
+                    <a href="distribution.html" class="btn primary">
                         <i class="fas fa-history"></i> عرض سجل التوزيع
-                    </button>
+                    </a>
                 </div>
             </div>
         </main>
@@ -193,4 +217,4 @@
     <script type="module" src="auth.js"></script>
     <script type="module" src="admin.js"></script>
 </body>
-                                                </html>
+    </html>
