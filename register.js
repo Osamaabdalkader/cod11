@@ -73,11 +73,13 @@ class RegisterManager {
   async handleRegister() {
     const name = document.getElementById('register-name').value;
     const email = document.getElementById('register-email').value;
+    const phone = document.getElementById('register-phone').value;
+    const address = document.getElementById('register-address').value;
     const password = document.getElementById('register-password').value;
     const referralCode = document.getElementById('referral-code').value;
     const alert = document.getElementById('register-alert');
     
-    if (!name || !email || !password) {
+    if (!name || !email || !phone || !password) {
       authManager.showAlert(alert, 'error', 'يرجى ملء جميع الحقول الإلزامية');
       return;
     }
@@ -96,6 +98,8 @@ class RegisterManager {
       await set(ref(database, 'users/' + userId), {
         name: name,
         email: email,
+        phone: phone,
+        address: address,
         referralCode: userReferralCode,
         points: 0,
         rank: 0,
