@@ -3,61 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء حساب - نظام الإحالة</title>
+    <title>إنشاء حساب - منصة تسريع</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="register.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h1>
-            <p>انضم إلى نظام الإحالة وابدأ في بناء شبكتك</p>
-        </header>
-        
-        <div class="tab-content active">
-            <form id="register-form">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-brand">
+                    <i class="fas fa-rocket"></i>
+                    <span>منصة تسريع</span>
+                </div>
+                <h1>إنشاء حساب جديد</h1>
+                <p>انضم إلى منصة التسويق الإلكتروني الرائدة</p>
+            </div>
+            
+            <form id="register-form" class="auth-form">
                 <div class="form-group">
                     <label for="register-name">الاسم الكامل *</label>
-                    <input type="text" id="register-name" placeholder="أدخل اسمك الكامل" required>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="register-name" placeholder="أدخل اسمك الكامل" required>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="register-email">البريد الإلكتروني *</label>
-                    <input type="email" id="register-email" placeholder="أدخل بريدك الإلكتروني" required>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="register-email" placeholder="أدخل بريدك الإلكتروني" required>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="register-phone">رقم الهاتف *</label>
-                    <input type="tel" id="register-phone" placeholder="أدخل رقم هاتفك" required>
+                    <div class="input-with-icon">
+                        <i class="fas fa-phone"></i>
+                        <input type="tel" id="register-phone" placeholder="أدخل رقم هاتفك" required>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="register-address">العنوان *</label>
-                    <textarea id="register-address" placeholder="أدخل عنوانك بالتفصيل" rows="3" required></textarea>
+                    <div class="input-with-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <textarea id="register-address" placeholder="أدخل عنوانك بالتفصيل" rows="2" required></textarea>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="register-password">كلمة المرور *</label>
-                    <input type="password" id="register-password" placeholder="أنشئ كلمة مرور قوية" required>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-password" placeholder="أنشئ كلمة مرور قوية" required>
+                    </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="referral-code">رمز الإحالة (اختياري)</label>
-                    <input type="text" id="referral-code" placeholder="أدخل رمز الإحالة إذا كان لديك">
+                    <div class="input-with-icon">
+                        <i class="fas fa-user-plus"></i>
+                        <input type="text" id="referral-code" placeholder="أدخل رمز الإحالة إذا كان لديك">
+                    </div>
                 </div>
                 
-                <button type="submit">إنشاء حساب</button>
+                <button type="submit" class="auth-btn">
+                    <i class="fas fa-user-plus"></i>
+                    إنشاء حساب
+                </button>
             </form>
             
             <div class="alert" id="register-alert"></div>
             
-            <p style="margin-top: 20px; text-align: center;">
-                لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a>
-            </p>
-            
-            <p style="text-align: center;">
-                <a href="index.html">العودة إلى الصفحة الرئيسية</a>
-            </p>
+            <div class="auth-footer">
+                <p>لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a></p>
+                <p><a href="index.html">العودة إلى الصفحة الرئيسية</a></p>
+            </div>
         </div>
     </div>
 
@@ -74,4 +96,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
