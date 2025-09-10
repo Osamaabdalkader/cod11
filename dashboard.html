@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - نظام الإحالة</title>
+    <title>لوحة التحكم - منصة تسريع</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
@@ -33,8 +32,8 @@
         
         <nav class="dashboard-nav">
             <div class="nav-brand">
-                <i class="fas fa-network-wired"></i>
-                <span>نظام الإحالة</span>
+                <i class="fas fa-rocket"></i>
+                <span>منصة تسريع</span>
             </div>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">
@@ -63,18 +62,22 @@
         <main class="dashboard-main">
             <div class="welcome-banner">
                 <div class="banner-content">
-                    <h1>مرحباً بعودتك، <span id="banner-username">مستخدم</span>!</h1>
-                    <p>هنا يمكنك متابعة أدائك وإدارة شبكة الإحالات الخاصة بك</p>
+                    <h1>مرحباً بك في منصة تسريع، <span id="banner-username">مستخدم</span>!</h1>
+                    <p>منصة التسويق الإلكتروني المتكاملة لتسريع نمو أعمالك</p>
                 </div>
-                <div class="banner-actions">
-                    <button class="banner-btn primary">
-                        <i class="fas fa-plus"></i>
-                        إحالة جديدة
-                    </button>
-                    <button class="banner-btn secondary">
-                        <i class="fas fa-chart-line"></i>
-                        عرض التقارير
-                    </button>
+                <div class="user-details-banner">
+                    <div class="user-detail-item">
+                        <i class="fas fa-envelope"></i>
+                        <span id="user-email">البريد الإلكتروني</span>
+                    </div>
+                    <div class="user-detail-item">
+                        <i class="fas fa-phone"></i>
+                        <span id="user-phone">رقم الهاتف</span>
+                    </div>
+                    <div class="user-detail-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="user-address">العنوان</span>
+                    </div>
                 </div>
             </div>
 
@@ -85,7 +88,7 @@
                     </div>
                     <div class="stat-info">
                         <h3 id="referrals-count">0</h3>
-                        <p>إجمالي الإحالات</p>
+                        <p>إجمالي الأعضاء</p>
                     </div>
                     <div class="stat-trend up">+5%</div>
                 </div>
@@ -126,15 +129,15 @@
 
             <div class="dashboard-content">
                 <div class="content-col main-col">
-                    <div class="card referral-card">
+                    <div class="card">
                         <div class="card-header">
-                            <h2><i class="fas fa-share-alt"></i> رابط الإحالة الخاص بك</h2>
+                            <h2><i class="fas fa-link"></i> رابط التسريع الخاص بك</h2>
                             <button class="icon-btn" id="refresh-link">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
                         <div class="card-body">
-                            <p class="card-description">شارك هذا الرابط مع أصدقائك لتحصل على نقاط مكافآت عند انضمامهم.</p>
+                            <p class="card-description">شارك هذا الرابط مع الآخرين لتحصل على نقاط مكافآت عند انضمامهم.</p>
                             
                             <div class="referral-input-group">
                                 <input type="text" id="referral-link" readonly>
@@ -144,7 +147,7 @@
                             </div>
                             
                             <div class="referral-code-group">
-                                <label>كود الإحالة:</label>
+                                <label>كود التسريع:</label>
                                 <div class="code-display">
                                     <span id="referral-code-display">Loading...</span>
                                     <button class="icon-btn small" id="copy-code-btn">
@@ -172,7 +175,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h2><i class="fas fa-list"></i> أحدث الإحالات</h2>
+                            <h2><i class="fas fa-list"></i> أحدث الأعضاء</h2>
                             <div class="header-controls">
                                 <div class="search-box">
                                     <input type="text" placeholder="ابحث..." id="referrals-search">
@@ -193,13 +196,14 @@
                                         <tr>
                                             <th data-sort="name">الاسم <i class="fas fa-sort"></i></th>
                                             <th data-sort="email">البريد الإلكتروني <i class="fas fa-sort"></i></th>
+                                            <th data-sort="phone">رقم الهاتف <i class="fas fa-sort"></i></th>
                                             <th data-sort="joinDate">تاريخ الانضمام <i class="fas fa-sort"></i></th>
                                             <th>الحالة</th>
                                         </tr>
                                     </thead>
                                     <tbody id="recent-referrals">
                                         <tr>
-                                            <td colspan="4" class="loading-row">
+                                            <td colspan="5" class="loading-row">
                                                 <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
                                             </td>
                                         </tr>
@@ -238,7 +242,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h2><i class="fas fa-share-alt"></i> توزيع النقاط</h2>
+                            <h2><i class="fas fa-chart-line"></i> توزيع النقاط</h2>
                             <div class="header-controls">
                                 <select class="page-filter" id="distribution-per-page">
                                     <option value="5">5</option>
@@ -291,4 +295,4 @@
     <script type="module" src="auth.js"></script>
     <script type="module" src="dashboard.js"></script>
 </body>
-                                      </html>
+                                                      </html>
