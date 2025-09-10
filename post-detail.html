@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنشور - تسريع</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="post-detail.css">
+</head>
+<body>
+    <!-- شريط الرأس -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="home-icon">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <h1>تفاصيل المنشور</h1>
+        </div>
+    </header>
+
+    <!-- محتوى الصفحة -->
+    <div class="container">
+        <div id="post-detail-content">
+            <!-- سيتم تحميل محتوى المنشور هنا -->
+            <div class="loading-text">جاري تحميل المنشور...</div>
+        </div>
+        
+        <div class="purchase-section">
+            <button id="buy-now-btn" class="btn btn-success">اشتري الآن</button>
+        </div>
+    </div>
+
+    <!-- شريط التذييل -->
+    <footer>
+        <div class="footer-icons">
+            <a href="profile.html" class="icon">
+                <i class="fas fa-user"></i>
+                <span>حسابي</span>
+            </a>
+            <a href="messages.html" class="icon">
+                <i class="fas fa-envelope"></i>
+                <span>الرسائل</span>
+            </a>
+            <a href="add-post.html" class="icon highlight">
+                <i class="fas fa-plus"></i>
+            </a>
+            <a href="#" class="icon" id="support-icon">
+                <i class="fas fa-headset"></i>
+                <span>الدعم</span>
+            </a>
+            <a href="#" class="icon" id="more-icon">
+                <i class="fas fa-ellipsis-h"></i>
+                <span>المزيد</span>
+            </a>
+            <!-- أيقونة الإدارة (تظهر للمشرفين فقط) -->
+            <a href="orders.html" class="icon" id="admin-icon" style="display: none;">
+                <i class="fas fa-cog"></i>
+                <span>الإدارة</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="post-detail.js"></script>
+</body>
+</html>

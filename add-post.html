@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة منشور - تسريع</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="add-post.css">
+</head>
+<body>
+    <!-- شريط الرأس -->
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="home-icon">
+                <i class="fas fa-home"></i>
+            </a>
+            <h1>إضافة منشور جديد</h1>
+        </div>
+    </header>
+
+    <!-- محتوى الصفحة -->
+    <div class="container">
+        <div class="page-content">
+            <form id="add-post-form" class="post-form">
+                <div class="form-group">
+                    <label for="post-title">عنوان المنشور *</label>
+                    <input type="text" id="post-title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="post-description">وصف المنشور *</label>
+                    <textarea id="post-description" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="post-category">نوع المنتج *</label>
+                    <select id="post-category" required>
+                 
+                            <option value="">جميع الفئات</option>
+                            <option value="ادوية">ادوية</option>
+                            <option value="عقارات">عقارات</option>
+                            <option value="الكترونيات">الكترونيات</option>
+                            <option value="ملابس">ملابس</option>
+                            <option value="وظائف">وظائف</option>
+                            <option value="اخرى">أخرى</option>
+                
+                <div class="form-group">
+                    <label for="post-price">السعر (اختياري)</label>
+                    <input type="text" id="post-price" placeholder="مثال: 100 ريال">
+                </div>
+                
+                <div class="form-group">
+                    <label for="post-location">المكان *</label>
+                    <select id="post-location" required>
+                        <option value="">جميع المدن</option>
+                            <option value="تعز">تعز</option>
+                            <option value="عدن">عدن</option>
+                            <option value="مارب">مارب</option>
+                            <option value="صنعاء">صنعاء</option>
+                            <option value="الحديدة">الحديدة</option>
+                            <option value="شبوة">شبوة</option>
+                            <option value="اب">اب</option>
+                            <option value="ذمار">ذمار</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="post-phone">رقم الهاتف *</label>
+                    <input type="tel" id="post-phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>صورة المنشور (اختياري)</label>
+                    <div class="image-upload-container">
+                        <button type="button" id="choose-image-btn" class="btn-outline">
+                            <i class="fas fa-image"></i> اختيار صورة
+                        </button>
+                        <button type="button" id="camera-btn" class="btn-outline">
+                            <i class="fas fa-camera"></i> الكاميرا
+                        </button>
+                        <span id="image-name">لم يتم اختيار صورة</span>
+                    </div>
+                    <input type="file" id="post-image" accept="image/*" hidden>
+                    
+                    <div id="image-preview" class="image-preview hidden">
+                        <img id="preview-img" src="" alt="معاينة الصورة">
+                        <button type="button" id="remove-image-btn" class="btn-remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn" id="publish-btn">نشر المنشور</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- شريط التذييل -->
+    <footer>
+        <div class="footer-icons">
+            <a href="profile.html" class="icon">
+                <i class="fas fa-user"></i>
+                <span>حسابي</span>
+            </a>
+            <a href="messages.html" class="icon">
+                <i class="fas fa-envelope"></i>
+                <span>الرسائل</span>
+            </a>
+            <a href="add-post.html" class="icon highlight">
+                <i class="fas fa-plus"></i>
+            </a>
+            <a href="#" class="icon" id="support-icon">
+                <i class="fas fa-headset"></i>
+                <span>الدعم</span>
+            </a>
+            <a href="#" class="icon" id="more-icon">
+                <i class="fas fa-ellipsis-h"></i>
+                <span>المزيد</span>
+            </a>
+            <!-- أيقونة الإدارة (تظهر للمشرفين فقط) -->
+            <a href="orders.html" class="icon" id="admin-icon" style="display: none;">
+                <i class="fas fa-cog"></i>
+                <span>الإدارة</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- نافذة التحميل -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p>جاري التحميل...</p>
+        <div class="progress-bar">
+            <div class="progress" id="upload-progress"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module" src="add-post.js"></script>
+</body>
+    </html>
+    
