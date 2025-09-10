@@ -1,4 +1,4 @@
-// admin.js - الإصدار المحدث مع دعم التصميم الجديد
+// admin.js - الإصدار المحدث مع دعم التصميم الجديد ونظام الترقيم
 import { auth, database, ref, get, update } from './firebase.js';
 import { getAllUsers, searchUsers, addPointsToUser, checkAdminStatus } from './firebase.js';
 import { authManager } from './auth.js';
@@ -6,6 +6,11 @@ import { authManager } from './auth.js';
 class AdminManager {
   constructor() {
     this.currentUser = null;
+    this.currentPage = 1;
+    this.usersPerPage = 10;
+    this.totalPages = 1;
+    this.allUsers = [];
+    this.filteredUsers = [];
     this.init();
   }
 
@@ -143,7 +148,13 @@ class AdminManager {
     try {
       console.log("جاري تحميل جميع المستخدمين");
       const users = await getAllUsers();
-      this.displayUsers(users);
+      this.allUsers = Object.entries(users).map(([id, user]) => ({ id, ...user }));
+      
+      // ترتيب المستخدمين حسب تاريخ الانضمام (الأحدث أولاً)
+      this.allUsers.sort((a, b) => new Date(b.joinDate) - new Date(a.joinDate));
+      
+      this.filteredUsers = [...this.allUsers];
+      this.updatePagination();
     } catch (error) {
       console.error("Error loading users:", error);
       this.showError("فشل في تحميل المستخدمين");
@@ -151,36 +162,62 @@ class AdminManager {
   }
 
   async searchUsers() {
-    const searchTerm = document.getElementById('admin-search').value;
+    const searchTerm = document.getElementById('admin-search').value.toLowerCase();
     const rankFilter = document.getElementById('admin-rank-filter').value;
     
     try {
-      const results = await searchUsers(searchTerm, rankFilter);
-      this.displayUsers(results);
+      // إذا لم يكن هناك بحث أو تصفية، عرض جميع المستخدمين
+      if (!searchTerm && !rankFilter) {
+        this.filteredUsers = [...this.allUsers];
+      } else {
+        // تطبيق البحث والتصفية
+        this.filteredUsers = this.allUsers.filter(user => {
+          const matchesSearch = !searchTerm || 
+            (user.name && user.name.toLowerCase().includes(searchTerm)) ||
+            (user.email && user.email.toLowerCase().includes(searchTerm));
+          
+          const matchesRank = !rankFilter || (user.rank || 0).toString() === rankFilter;
+          
+          return matchesSearch && matchesRank;
+        });
+      }
+      
+      this.currentPage = 1; // العودة إلى الصفحة الأولى عند البحث/التصفية
+      this.updatePagination();
     } catch (error) {
       console.error("Error searching users:", error);
       this.showError("فشل في البحث عن المستخدمين");
     }
   }
 
-  displayUsers(users) {
+  updatePagination() {
+    // حساب عدد الصفحات
+    this.totalPages = Math.ceil(this.filteredUsers.length / this.usersPerPage);
+    
+    // عرض المستخدمين للصفحة الحالية
+    this.displayUsers();
+    
+    // تحديث واجهة الترقيم
+    this.updatePaginationUI();
+  }
+
+  displayUsers() {
     const usersTable = document.getElementById('admin-users-table');
     if (!usersTable) return;
 
     usersTable.innerHTML = '';
 
-    if (!users || Object.keys(users).length === 0) {
+    if (!this.filteredUsers || this.filteredUsers.length === 0) {
       usersTable.innerHTML = '<tr><td colspan="8" style="text-align: center;">لا توجد نتائج</td></tr>';
       return;
     }
 
-    // تحويل كائن المستخدمين إلى مصفوفة للترتيب
-    const usersArray = Object.entries(users).map(([id, user]) => ({ id, ...user }));
-    
-    // ترتيب المستخدمين حسب تاريخ الانضمام (الأحدث أولاً)
-    usersArray.sort((a, b) => new Date(b.joinDate) - new Date(a.joinDate));
+    // حساب مؤشرات البداية والنهاية للصفحة الحالية
+    const startIndex = (this.currentPage - 1) * this.usersPerPage;
+    const endIndex = Math.min(startIndex + this.usersPerPage, this.filteredUsers.length);
+    const currentUsers = this.filteredUsers.slice(startIndex, endIndex);
 
-    usersArray.forEach(user => {
+    currentUsers.forEach(user => {
       const row = usersTable.insertRow();
       
       const rankTitles = [
@@ -214,6 +251,95 @@ class AdminManager {
 
     // إضافة مستمعين للأزرار
     this.setupUserActionsListeners();
+  }
+
+  updatePaginationUI() {
+    const paginationContainer = document.getElementById('pagination-container');
+    const paginationInfo = document.getElementById('pagination-info');
+    const paginationPages = document.getElementById('pagination-pages');
+    const prevButton = document.getElementById('pagination-prev');
+    const nextButton = document.getElementById('pagination-next');
+    
+    if (this.filteredUsers.length === 0) {
+      paginationContainer.style.display = 'none';
+      return;
+    }
+    
+    paginationContainer.style.display = 'flex';
+    
+    // تحديث معلومات الترقيم
+    const startIndex = (this.currentPage - 1) * this.usersPerPage + 1;
+    const endIndex = Math.min(startIndex + this.usersPerPage - 1, this.filteredUsers.length);
+    paginationInfo.textContent = `عرض ${startIndex} إلى ${endIndex} من ${this.filteredUsers.length} مستخدم`;
+    
+    // تحديث أزرار الصفحات
+    paginationPages.innerHTML = '';
+    
+    // حساب الصفحات التي يجب عرضها
+    let startPage = Math.max(1, this.currentPage - 2);
+    let endPage = Math.min(this.totalPages, startPage + 4);
+    
+    if (endPage - startPage < 4) {
+      startPage = Math.max(1, endPage - 4);
+    }
+    
+    // إضافة زر الصفحة الأولى إذا لزم الأمر
+    if (startPage > 1) {
+      const firstPageBtn = document.createElement('button');
+      firstPageBtn.className = 'pagination-page';
+      firstPageBtn.textContent = '1';
+      firstPageBtn.addEventListener('click', () => this.goToPage(1));
+      paginationPages.appendChild(firstPageBtn);
+      
+      if (startPage > 2) {
+        const ellipsis = document.createElement('span');
+        ellipsis.className = 'pagination-ellipsis';
+        ellipsis.textContent = '...';
+        paginationPages.appendChild(ellipsis);
+      }
+    }
+    
+    // إضافة أزرار الصفحات
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.className = `pagination-page ${i === this.currentPage ? 'active' : ''}`;
+      pageBtn.textContent = i;
+      pageBtn.addEventListener('click', () => this.goToPage(i));
+      paginationPages.appendChild(pageBtn);
+    }
+    
+    // إضافة زر الصفحة الأخيرة إذا لزم الأمر
+    if (endPage < this.totalPages) {
+      if (endPage < this.totalPages - 1) {
+        const ellipsis = document.createElement('span');
+        ellipsis.className = 'pagination-ellipsis';
+        ellipsis.textContent = '...';
+        paginationPages.appendChild(ellipsis);
+      }
+      
+      const lastPageBtn = document.createElement('button');
+      lastPageBtn.className = 'pagination-page';
+      lastPageBtn.textContent = this.totalPages;
+      lastPageBtn.addEventListener('click', () => this.goToPage(this.totalPages));
+      paginationPages.appendChild(lastPageBtn);
+    }
+    
+    // تحديث حالة أزرار السابق والتالي
+    prevButton.disabled = this.currentPage === 1;
+    nextButton.disabled = this.currentPage === this.totalPages;
+  }
+
+  goToPage(page) {
+    if (page < 1 || page > this.totalPages) return;
+    
+    this.currentPage = page;
+    this.updatePagination();
+    
+    // التمرير إلى أعلى الجدول
+    const table = document.querySelector('.users-table');
+    if (table) {
+      table.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   setupUserActionsListeners() {
@@ -285,6 +411,50 @@ class AdminManager {
     if (rankFilter) {
       rankFilter.addEventListener('change', () => {
         this.searchUsers();
+      });
+    }
+
+    // عدد المستخدمين في الصفحة
+    const usersPerPage = document.getElementById('users-per-page');
+    if (usersPerPage) {
+      usersPerPage.addEventListener('change', (e) => {
+        this.usersPerPage = parseInt(e.target.value);
+        this.currentPage = 1;
+        this.updatePagination();
+      });
+    }
+
+    // أزرار الترقيم
+    const prevButton = document.getElementById('pagination-prev');
+    const nextButton = document.getElementById('pagination-next');
+    
+    if (prevButton) {
+      prevButton.addEventListener('click', () => {
+        this.goToPage(this.currentPage - 1);
+      });
+    }
+    
+    if (nextButton) {
+      nextButton.addEventListener('click', () => {
+        this.goToPage(this.currentPage + 1);
+      });
+    }
+
+    // زر تحديث البيانات
+    const refreshButton = document.getElementById('refresh-data-btn');
+    if (refreshButton) {
+      refreshButton.addEventListener('click', () => {
+        this.loadAllUsers();
+        this.loadAdminStats();
+        this.showSuccess("تم تحديث البيانات بنجاح");
+      });
+    }
+
+    // زر التقارير الإحصائية
+    const statsButton = document.getElementById('stats-report-btn');
+    if (statsButton) {
+      statsButton.addEventListener('click', () => {
+        this.showDistributionHistory();
       });
     }
 
