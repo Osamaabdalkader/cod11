@@ -1,4 +1,4 @@
-// dashboard.js
+// dashboard.js - إصدار متطور مع ديناميكية الألوان حسب المرتبة
 import { auth, database, ref, get, onValue, query, orderByChild, equalTo } from './firebase.js';
 import { checkPromotions, setupRankChangeListener, checkAdminStatus } from './firebase.js';
 import { authManager } from './auth.js';
@@ -44,6 +44,7 @@ class DashboardManager {
       
       if (this.userData) {
         this.updateUserUI();
+        this.applyRankTheme(this.userData.rank || 0);
         this.loadReferralsData(userId);
         this.loadDistributionData(userId);
       }
@@ -60,13 +61,24 @@ class DashboardManager {
       const joinDate = document.getElementById('join-date');
       const referralLink = document.getElementById('referral-link');
       const referralCodeDisplay = document.getElementById('referral-code-display');
+      const bannerUsername = document.getElementById('banner-username');
+      const userRankDisplay = document.getElementById('user-rank-display');
       
       if (usernameEl) usernameEl.textContent = this.userData.name;
+      if (bannerUsername) bannerUsername.textContent = this.userData.name;
       if (userAvatar) userAvatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.userData.name)}&background=random`;
-      if (pointsCount) pointsCount.textContent = this.userData.points || '0';
+      if (pointsCount) pointsCount.textContent = this.formatNumber(this.userData.points || 0);
       if (joinDate) joinDate.textContent = new Date(this.userData.joinDate).toLocaleDateString('ar-SA');
       if (referralLink) referralLink.value = `${window.location.origin}${window.location.pathname}?ref=${this.userData.referralCode}`;
       if (referralCodeDisplay) referralCodeDisplay.textContent = this.userData.referralCode || 'N/A';
+      
+      // تحديث عرض المرتبة
+      const rankTitles = [
+        "مبتدئ", "عضو", "عضو متميز", "عضو نشيط", "عضو فعال",
+        "عضو برونزي", "عضو فضي", "عضو ذهبي", "عضو بلاتيني", "عضو ماسي", "قائد"
+      ];
+      const currentRank = this.userData.rank || 0;
+      if (userRankDisplay) userRankDisplay.textContent = `مرتبة: ${rankTitles[currentRank]}`;
       
       // تحميل عدد الإحالات
       this.loadReferralsCount(auth.currentUser.uid);
@@ -79,13 +91,26 @@ class DashboardManager {
     }
   }
 
+  applyRankTheme(rank) {
+    // إضافة كلاس المرتبة إلى body لتطبيق أنماط الألوان
+    document.body.classList.remove('rank-0', 'rank-1', 'rank-2', 'rank-3', 'rank-4', 
+                                  'rank-5', 'rank-6', 'rank-7', 'rank-8', 'rank-9', 'rank-10');
+    document.body.classList.add(`rank-${rank}`);
+    
+    // تحديث ألوان الشعار حسب المرتبة
+    const navBrandIcon = document.querySelector('.nav-brand i');
+    if (navBrandIcon) {
+      navBrandIcon.style.color = `var(--primary)`;
+    }
+  }
+
   async checkAdminStatus() {
     try {
       const isAdmin = await checkAdminStatus(auth.currentUser.uid);
       if (isAdmin) {
         // إظهار عناصر المشرفين
         document.querySelectorAll('.admin-only').forEach(el => {
-          el.style.display = 'block';
+          el.style.display = 'flex';
         });
       } else {
         // إخفاء عناصر المشرفين
@@ -103,7 +128,7 @@ class DashboardManager {
       const snapshot = await get(ref(database, 'userReferrals/' + userId));
       const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
       const referralsCountEl = document.getElementById('referrals-count');
-      if (referralsCountEl) referralsCountEl.textContent = count;
+      if (referralsCountEl) referralsCountEl.textContent = this.formatNumber(count);
     } catch (error) {
       console.error("Error loading referrals count:", error);
     }
@@ -149,6 +174,9 @@ class DashboardManager {
         valueB = new Date(valueB);
       }
       
+      if (typeof valueA === 'string') valueA = valueA.toLowerCase();
+      if (typeof valueB === 'string') valueB = valueB.toLowerCase();
+      
       if (valueA < valueB) return this.referralsSortDirection === 'asc' ? -1 : 1;
       if (valueA > valueB) return this.referralsSortDirection === 'asc' ? 1 : -1;
       return 0;
@@ -159,10 +187,12 @@ class DashboardManager {
 
   renderReferralsTable() {
     const referralsTable = document.getElementById('recent-referrals');
+    const referralsInfo = document.getElementById('referrals-info');
     if (!referralsTable) return;
     
     if (this.referralsData.length === 0) {
       referralsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد إحالات حتى الآن</td></tr>';
+      if (referralsInfo) referralsInfo.textContent = 'عرض 0 إلى 0 من 0 إدخالات';
       this.renderReferralsPagination();
       return;
     }
@@ -173,8 +203,8 @@ class DashboardManager {
     
     if (searchTerm) {
       filteredData = this.referralsData.filter(item => 
-        item.name?.toLowerCase().includes(searchTerm) || 
-        item.email?.toLowerCase().includes(searchTerm)
+        (item.name && item.name.toLowerCase().includes(searchTerm)) || 
+        (item.email && item.email.toLowerCase().includes(searchTerm))
       );
     }
     
@@ -186,15 +216,26 @@ class DashboardManager {
     
     referralsTable.innerHTML = '';
     
-    pageData.forEach((referral) => {
-      const row = referralsTable.insertRow();
-      row.innerHTML = `
-        <td>${referral.name || 'غير معروف'}</td>
-        <td>${referral.email || 'غير معروف'}</td>
-        <td>${new Date(referral.joinDate).toLocaleDateString('ar-SA')}</td>
-        <td><span class="user-badge level-0">نشط</span></td>
-      `;
-    });
+    if (pageData.length === 0) {
+      referralsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد نتائج</td></tr>';
+    } else {
+      pageData.forEach((referral) => {
+        const row = referralsTable.insertRow();
+        row.innerHTML = `
+          <td>${referral.name || 'غير معروف'}</td>
+          <td>${referral.email || 'غير معروف'}</td>
+          <td>${new Date(referral.joinDate).toLocaleDateString('ar-SA')}</td>
+          <td><span class="user-badge">نشط</span></td>
+        `;
+      });
+    }
+    
+    // تحديث معلومات الجدول
+    if (referralsInfo) {
+      const start = filteredData.length > 0 ? startIndex + 1 : 0;
+      const end = startIndex + pageData.length;
+      referralsInfo.textContent = `عرض ${start} إلى ${end} من ${filteredData.length} إدخالات`;
+    }
     
     this.renderReferralsPagination(totalPages, filteredData.length);
   }
@@ -292,10 +333,12 @@ class DashboardManager {
 
   async renderDistributionTable() {
     const distributionsTable = document.getElementById('recent-distributions');
+    const distributionInfo = document.getElementById('distribution-info');
     if (!distributionsTable) return;
     
     if (this.distributionData.length === 0) {
       distributionsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد توزيعات حتى الآن</td></tr>';
+      if (distributionInfo) distributionInfo.textContent = 'عرض 0 إلى 0 من 0 إدخالات';
       this.renderDistributionPagination();
       return;
     }
@@ -334,26 +377,31 @@ class DashboardManager {
     
     if (pageData.length === 0) {
       distributionsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">لا توجد نتائج</td></tr>';
-      this.renderDistributionPagination(totalPages, filteredData.length);
-      return;
+    } else {
+      for (const log of pageData) {
+        // الحصول على اسم العضو المصدر
+        try {
+          const userSnapshot = await get(ref(database, 'users/' + log.sourceUserId));
+          const userName = userSnapshot.exists() ? userSnapshot.val().name : 'مستخدم غير معروف';
+          
+          const row = distributionsTable.insertRow();
+          row.innerHTML = `
+            <td>${userName}</td>
+            <td>${this.formatNumber(log.points)}</td>
+            <td>${log.level}</td>
+            <td>${new Date(log.timestamp).toLocaleDateString('ar-SA')}</td>
+          `;
+        } catch (error) {
+          console.error("Error rendering distribution row:", error);
+        }
+      }
     }
     
-    for (const log of pageData) {
-      // الحصول على اسم العضو المصدر
-      try {
-        const userSnapshot = await get(ref(database, 'users/' + log.sourceUserId));
-        const userName = userSnapshot.exists() ? userSnapshot.val().name : 'مستخدم غير معروف';
-        
-        const row = distributionsTable.insertRow();
-        row.innerHTML = `
-          <td>${userName}</td>
-          <td>${log.points}</td>
-          <td>${log.level}</td>
-          <td>${new Date(log.timestamp).toLocaleDateString('ar-SA')}</td>
-        `;
-      } catch (error) {
-        console.error("Error rendering distribution row:", error);
-      }
+    // تحديث معلومات الجدول
+    if (distributionInfo) {
+      const start = filteredData.length > 0 ? startIndex + 1 : 0;
+      const end = startIndex + pageData.length;
+      distributionInfo.textContent = `عرض ${start} إلى ${end} من ${filteredData.length} إدخالات`;
     }
     
     this.renderDistributionPagination(totalPages, filteredData.length);
@@ -433,23 +481,23 @@ class DashboardManager {
       const progressPercentage = currentRank === 0 ? Math.min((this.userData.points || 0) / 100 * 100, 100) : 0;
       
       rankInfoElement.innerHTML = `
-        <div class="rank-card">
-          <h3>مرتبتك الحالية</h3>
-          <div class="current-rank">
-            <i class="${rankIcons[currentRank]} fa-3x" style="color: var(--primary); margin-bottom: 15px;"></i>
-            <span class="rank-title">${rankTitles[currentRank]}</span>
-            <span class="rank-level">المرتبة ${currentRank}</span>
+        <div class="rank-display">
+          <div class="rank-icon">
+            <i class="${rankIcons[currentRank]}"></i>
           </div>
-          <div class="next-rank">
+          <div class="rank-title">${rankTitles[currentRank]}</div>
+          <div class="rank-level">المرتبة ${currentRank}</div>
+          
+          ${currentRank < 10 ? `
+          <div class="rank-progress">
             <h4>الترقية القادمة: ${rankTitles[nextRank]}</h4>
             <p>${nextRankRequirements[currentRank]}</p>
-            ${currentRank < 10 ? `
             <div class="progress-bar">
-              <div class="progress" style="width: ${progressPercentage}%"></div>
-              <span>${Math.round(progressPercentage)}%</span>
+              <div class="progress-fill" style="width: ${progressPercentage}%"></div>
             </div>
-            ` : ''}
+            ${currentRank === 0 ? `<p>${this.userData.points || 0} / 100 نقطة</p>` : ''}
           </div>
+          ` : ''}
         </div>
       `;
     } catch (error) {
@@ -476,7 +524,7 @@ class DashboardManager {
       }
       
       const earnedPointsEl = document.getElementById('earned-points');
-      if (earnedPointsEl) earnedPointsEl.textContent = totalPoints;
+      if (earnedPointsEl) earnedPointsEl.textContent = this.formatNumber(totalPoints);
       
       return totalPoints;
     } catch (error) {
@@ -504,13 +552,17 @@ class DashboardManager {
       }
       
       const benefitedMembersEl = document.getElementById('benefited-members');
-      if (benefitedMembersEl) benefitedMembersEl.textContent = uniqueMembers.size;
+      if (benefitedMembersEl) benefitedMembersEl.textContent = this.formatNumber(uniqueMembers.size);
       
       return uniqueMembers.size;
     } catch (error) {
       console.error("Error counting benefited members:", error);
       return 0;
     }
+  }
+
+  formatNumber(num) {
+    return new Intl.NumberFormat('ar-SA').format(num);
   }
 
   setupEventListeners() {
@@ -523,9 +575,10 @@ class DashboardManager {
         document.execCommand('copy');
         
         // تأثير عند النسخ
+        const originalText = copyLinkBtn.innerHTML;
         copyLinkBtn.innerHTML = '<i class="fas fa-check"></i> تم النسخ!';
         setTimeout(() => {
-          copyLinkBtn.innerHTML = '<i class="fas fa-copy"></i> نسخ الرابط';
+          copyLinkBtn.innerHTML = originalText;
         }, 2000);
       });
     }
@@ -543,9 +596,10 @@ class DashboardManager {
         document.body.removeChild(tempTextArea);
         
         // تأثير عند النسخ
+        const originalHtml = copyCodeBtn.innerHTML;
         copyCodeBtn.innerHTML = '<i class="fas fa-check"></i>';
         setTimeout(() => {
-          copyCodeBtn.innerHTML = '<i class="fas fa-copy"></i>';
+          copyCodeBtn.innerHTML = originalHtml;
         }, 2000);
       });
     }
@@ -646,23 +700,23 @@ class DashboardManager {
     }
     
     // فرز الجداول عند النقر على العناوين
-    const referralsHeaders = document.querySelectorAll('#referrals-table th');
-    const distributionHeaders = document.querySelectorAll('#distribution-table th');
+    const referralsHeaders = document.querySelectorAll('#referrals-table th[data-sort]');
+    const distributionHeaders = document.querySelectorAll('#distribution-table th[data-sort]');
     
-    referralsHeaders.forEach((header, index) => {
+    referralsHeaders.forEach(header => {
       header.addEventListener('click', () => {
-        const fields = ['name', 'email', 'joinDate', 'status'];
-        if (fields[index]) {
-          this.sortReferralsData(fields[index]);
+        const field = header.getAttribute('data-sort');
+        if (field) {
+          this.sortReferralsData(field);
         }
       });
     });
     
-    distributionHeaders.forEach((header, index) => {
+    distributionHeaders.forEach(header => {
       header.addEventListener('click', () => {
-        const fields = ['sourceUserId', 'points', 'level', 'timestamp'];
-        if (fields[index]) {
-          this.sortDistributionData(fields[index]);
+        const field = header.getAttribute('data-sort');
+        if (field) {
+          this.sortDistributionData(field);
         }
       });
     });
@@ -717,6 +771,9 @@ class DashboardManager {
         if (snapshot.exists()) {
           const newRank = snapshot.val();
           console.log(`تم تغيير مرتبتك إلى: ${newRank}`);
+          
+          // تطبيق سمة المرتبة الجديدة
+          this.applyRankTheme(newRank);
           
           // عند تغيير المرتبة، أعد تحميل واجهة المستخدم
           this.loadUserData(userId);
