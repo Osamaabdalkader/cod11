@@ -5,46 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>شبكتي - نظام الإحالة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="network.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="user-info">
-                <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
-                <span id="username">مستخدم</span>
-            </div>
-            <h1><i class="fas fa-network-wired"></i> شبكة الإحالات</h1>
-            <p>عرض كامل لشبكة الإحالات الخاصة بك</p>
-        </header>
-        
-        <div class="tabs">
-            <div class="tab" onclick="window.location.href='index.html'">الرئيسية</div>
-            <div class="tab" onclick="window.location.href='dashboard.html'">لوحة التحكم</div>
-            <div class="tab active">شبكتي</div>
-            <div class="tab" onclick="window.location.href='management.html'">الإدارة</div>
-            <div class="tab" id="logout-btn">تسجيل الخروج</div>
-        </div>
-        
-        <div class="tab-content active">
-            <h2>شبكة الإحالات الخاصة بي</h2>
-            <p>هنا يمكنك رؤية شبكة الإحالات الخاصة بك بشكل كامل مع جميع المستويات.</p>
-            
-            <div class="network-container" id="network-container">
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i> جاري تحميل الشبكة...
+    <div class="container dashboard-container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="user-info">
+                    <img id="user-avatar" src="https://ui-avatars.com/api/?name=مستخدم&background=random" alt="صورة المستخدم">
+                    <div class="user-details">
+                        <span id="username">مستخدم</span>
+                        <span class="user-rank" id="user-rank-display">مرتبة: مبتدئ</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="header-btn" id="notifications-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="header-btn" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </div>
             </div>
-        </div>
+        </header>
+        
+        <nav class="dashboard-nav">
+            <div class="nav-brand">
+                <i class="fas fa-network-wired"></i>
+                <span>نظام الإحالة</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>الرئيسية</span>
+                </a>
+                <a href="dashboard.html" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>لوحة التحكم</span>
+                </a>
+                <a href="network.html" class="nav-link active">
+                    <i class="fas fa-sitemap"></i>
+                    <span>شبكتي</span>
+                </a>
+                <a href="management.html" class="nav-link">
+                    <i class="fas fa-users-cog"></i>
+                    <span>الإدارة</span>
+                </a>
+                <a href="admin.html" class="nav-link admin-only">
+                    <i class="fas fa-user-shield"></i>
+                    <span>لوحة المشرفين</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="dashboard-main">
+            <div class="welcome-banner">
+                <div class="banner-content">
+                    <h1>شبكة الإحالات الخاصة بك، <span id="banner-username">مستخدم</span>!</h1>
+                    <p>هنا يمكنك رؤية شبكة الإحالات الخاصة بك بشكل كامل مع جميع المستويات</p>
+                </div>
+                <div class="banner-actions">
+                    <button class="banner-btn primary">
+                        <i class="fas fa-download"></i>
+                        تصدير البيانات
+                    </button>
+                    <button class="banner-btn secondary">
+                        <i class="fas fa-search"></i>
+                        بحث متقدم
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-members">0</h3>
+                        <p>إجمالي الأعضاء</p>
+                    </div>
+                    <div class="stat-trend up">+5%</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-levels">0</h3>
+                        <p>عدد المستويات</p>
+                    </div>
+                    <div class="stat-trend up">+2%</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="network-points">0</h3>
+                        <p>النقاط من الشبكة</p>
+                    </div>
+                    <div class="stat-trend up">+8%</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="highest-rank">0</h3>
+                        <p>أعلى مرتبة في الفريق</p>
+                    </div>
+                    <div class="stat-trend up">+1%</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-sitemap"></i> شبكة الإحالات الخاصة بي</h2>
+                    <div class="header-controls">
+                        <div class="search-box">
+                            <input type="text" placeholder="ابحث في الشبكة..." id="network-search">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <select class="page-filter" id="network-depth">
+                            <option value="3">3 مستويات</option>
+                            <option value="5" selected>5 مستويات</option>
+                            <option value="7">7 مستويات</option>
+                            <option value="10">10 مستويات</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">هنا يمكنك رؤية شبكة الإحالات الخاصة بك بشكل كامل مع جميع المستويات. انقر على أي عضو لرؤية المزيد من التفاصيل.</p>
+                    
+                    <div class="network-container" id="network-container">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> جاري تحميل الشبكة...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <!-- Firebase SDK -->
-<!-- ملفات التطبيق -->
-<script type="module" src="firebase.js"></script>
-<script type="module" src="auth.js"></script>
-<script type="module" src="network.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="network.js"></script>
 </body>
-</html>
-
-
-
+    </html>
