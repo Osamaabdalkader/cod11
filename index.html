@@ -15,7 +15,7 @@
         <div class="header-top">
             <div class="logo-container">
                 <img src="tasreea.png" alt="تسريع" class="logo-image">
-                <h1>تسريع</h1>
+                <h1>منصة تسريع الإلكترونية</h1>
             </div>
             <div class="header-top-icons">
                 <div class="icon" id="notifications-icon">
@@ -34,7 +34,7 @@
                 <button class="search-btn"><i class="fas fa-search"></i></button>
             </div>
 
-            <div class="filters-scroll">
+            <div class="filters-container">
                 <div class="filters-row">
                     <div class="filter-category">
                         <select class="filter-select">
@@ -67,9 +67,12 @@
 
     <!-- الصفحة الرئيسية -->
     <div class="container">
+        <div class="posts-loading" id="posts-loading">
+            <div class="spinner-small"></div>
+            <p>جاري تحميل المنشورات...</p>
+        </div>
         <div class="posts-grid" id="posts-container">
             <!-- سيتم تحميل المنشورات هنا -->
-            <div class="loading-text">جاري تحميل المنشورات...</div>
         </div>
     </div>
 
@@ -84,7 +87,7 @@
                 <i class="fas fa-shopping-cart"></i>
                 <span>السلة</span>
             </a>
-            <a href="add-post.html" class="icon highlight">
+            <a href="add-post.html" class="icon highlight" id="add-button">
                 <i class="fas fa-plus"></i>
                 <span>إضافة</span>
             </a>
@@ -98,15 +101,6 @@
             </a>
         </div>
     </footer>
-
-    <!-- نافذة التحميل -->
-    <div id="loading-overlay" class="loading-overlay hidden">
-        <div class="spinner"></div>
-        <p>جاري التحميل...</p>
-        <div class="progress-bar">
-            <div class="progress" id="upload-progress"></div>
-        </div>
-    </div>
 
     <!-- Firebase SDK -->
     <script type="module" src="app.js"></script>
