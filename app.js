@@ -64,7 +64,7 @@ function setupEventListeners() {
                 window.location.href = 'groups.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'login.html';
+                window.location.href = 'register.html';
             }
         });
     }
