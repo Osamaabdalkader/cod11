@@ -64,7 +64,7 @@ function setupEventListeners() {
                 window.location.href = 'groups.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
@@ -78,7 +78,7 @@ function setupEventListeners() {
                 window.location.href = 'cart.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
