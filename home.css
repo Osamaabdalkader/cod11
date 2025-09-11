@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -16,7 +16,7 @@ body {
 }
 
 .container {
-    padding: 90px 15px 100px; /* مساحة للهيدر والفوتر */
+    padding: 180px 15px 100px; /* مساحة للهيدر والفوتر */
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -54,6 +54,9 @@ header {
     display: flex;
     align-items: center;
     gap: 10px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .logo-image {
@@ -66,17 +69,20 @@ header {
 }
 
 .logo-container h1 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
     background: linear-gradient(to right, #4cc9f0, #90e0ef);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
 }
 
 .header-top-icons {
     display: flex;
     gap: 15px;
+    margin-right: auto;
+    margin-left: 15px;
 }
 
 .header-top-icons .icon {
@@ -164,6 +170,10 @@ header {
     background: linear-gradient(90deg, #3a86ff, #4cc9f0);
 }
 
+.filters-container {
+    width: 100%;
+}
+
 .filters-row {
     display: flex;
     justify-content: flex-end;
@@ -192,14 +202,14 @@ header {
 /* تصميم بطاقات المنتجات الجديدة */
 .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    margin-top: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
 }
 
 .post-card {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
+    border-radius: 12px;
     overflow: hidden;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -214,7 +224,7 @@ header {
 }
 
 .post-image {
-    height: 160px;
+    height: 140px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -235,26 +245,27 @@ header {
 
 .no-image {
     color: rgba(255, 255, 255, 0.4);
-    font-size: 2.5rem;
+    font-size: 2rem;
 }
 
 .post-content {
-    padding: 15px;
+    padding: 12px;
 }
 
 .post-title {
-    font-size: 1rem;
-    margin-bottom: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     color: #90e0ef;
+    font-weight: 600;
 }
 
 .post-description {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -266,51 +277,51 @@ header {
 .post-details {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
 .detail-item {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font-size: 0.75rem;
+    gap: 4px;
+    font-size: 0.7rem;
     background: rgba(0, 0, 0, 0.3);
-    padding: 4px 8px;
-    border-radius: 12px;
+    padding: 3px 6px;
+    border-radius: 10px;
     color: rgba(255, 255, 255, 0.9);
 }
 
 .detail-item i {
     color: #4cc9f0;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
 }
 
 .post-meta {
     display: flex;
     justify-content: space-between;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.6);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 10px;
+    padding-top: 8px;
 }
 
 .post-time, .post-author {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 }
 
 .post-meta i {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
 }
 
 .no-posts {
     text-align: center;
     grid-column: 1 / -1;
-    padding: 40px;
+    padding: 30px;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 /* تصميم الفوتر الجديد */
@@ -367,6 +378,8 @@ footer {
     align-items: center;
     margin-top: -25px;
     box-shadow: 0 5px 15px rgba(249, 215, 28, 0.4);
+    animation: pulse 2s infinite;
+    transition: all 0.3s ease;
 }
 
 .footer-icons .highlight i {
@@ -377,57 +390,53 @@ footer {
     font-weight: bold;
 }
 
-/* نافذة التحميل */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(15, 32, 39, 0.9);
+.footer-icons .highlight:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(249, 215, 28, 0.6);
+}
+
+.footer-icons .highlight:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 10px rgba(249, 215, 28, 0.4);
+}
+
+/* تحميل المنشورات */
+.posts-loading {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    z-index: 2000;
-    color: white;
+    justify-content: center;
+    padding: 30px;
+    color: rgba(255, 255, 255, 0.7);
 }
 
-.loading-overlay.hidden {
-    display: none;
-}
-
-.spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(76, 201, 240, 0.3);
+.spinner-small {
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(76, 201, 240, 0.3);
     border-radius: 50%;
     border-top-color: #4cc9f0;
     animation: spin 1s ease-in-out infinite;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
+/* أنيميشن */
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
 
-.progress-bar {
-    width: 200px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-top: 15px;
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(249, 215, 28, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(249, 215, 28, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(249, 215, 28, 0);
+    }
 }
 
-.progress {
-    height: 100%;
-    background: linear-gradient(90deg, #4cc9f0, #3a86ff);
-    width: 0%;
-    transition: width 0.3s ease;
-}
-
-/* أنيميشن */
 @keyframes float {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-5px); }
@@ -441,17 +450,52 @@ footer {
 /* تصميم متجاوب */
 @media (max-width: 768px) {
     .container {
-        padding: 100px 10px 90px;
+        padding: 160px 10px 90px;
+    }
+    
+    .logo-container {
+        position: static;
+        transform: none;
+        margin: 0 auto;
     }
     
     .logo-container h1 {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+    }
+    
+    .header-top {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .header-top-icons {
+        margin: 0;
+        order: -1;
+        margin-left: auto;
     }
     
     .header-top-icons .icon {
         width: 32px;
         height: 32px;
         font-size: 1rem;
+    }
+    
+    .header-bottom {
+        padding: 10px;
+    }
+    
+    .search-container {
+        order: 2;
+        margin-top: 10px;
+    }
+    
+    .filters-container {
+        order: 1;
+    }
+    
+    .filters-row {
+        justify-content: flex-start;
     }
     
     .search-input {
@@ -463,10 +507,6 @@ footer {
         padding: 8px 15px;
     }
     
-    .filters-row {
-        justify-content: center;
-    }
-    
     .filter-select {
         min-width: 110px;
         font-size: 0.8rem;
@@ -474,16 +514,16 @@ footer {
     }
     
     .posts-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 15px;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 12px;
     }
     
     .post-image {
-        height: 140px;
+        height: 130px;
     }
     
     .post-content {
-        padding: 12px;
+        padding: 10px;
     }
     
     .footer-icons .icon {
@@ -505,12 +545,17 @@ footer {
 }
 
 @media (max-width: 480px) {
+    .container {
+        padding: 150px 8px 80px;
+    }
+    
     .posts-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
     
     .header-top {
-        padding: 10px;
+        padding: 8px;
     }
     
     .logo-image {
@@ -518,14 +563,18 @@ footer {
         height: 35px;
     }
     
+    .logo-container h1 {
+        font-size: 1rem;
+    }
+    
     .header-bottom {
-        padding: 10px;
+        padding: 8px;
     }
     
     .filters-row {
         flex-direction: column;
         gap: 8px;
-        align-items: center;
+        align-items: flex-start;
     }
     
     .filter-select {
@@ -534,12 +583,12 @@ footer {
     }
     
     .footer-icons .icon span {
-        display: none;
+        font-size: 0.7rem;
     }
     
     .footer-icons .icon i {
-        margin-bottom: 0;
-        font-size: 1.4rem;
+        font-size: 1.1rem;
+        margin-bottom: 2px;
     }
     
     .footer-icons .highlight {
@@ -549,6 +598,27 @@ footer {
     }
     
     .footer-icons .highlight i {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
-  }
+    
+    .footer-icons .highlight span {
+        font-size: 0.7rem;
+    }
+}
+
+@media (min-width: 1200px) {
+    .header-bottom {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .search-container {
+        margin: 0;
+        max-width: 500px;
+    }
+    
+    .filters-row {
+        justify-content: flex-start;
+    }
+        }
