@@ -50,7 +50,7 @@ function setupEventListeners() {
             if (user) {
                 window.location.href = 'dashboard.html';
             } else {
-                window.location.href = 'login.html';
+                window.location.href = 'dashboard.html';
             }
         });
     }
