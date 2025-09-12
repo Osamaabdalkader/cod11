@@ -12,11 +12,11 @@ body {
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #fff;
     min-height: 100vh;
-    padding-bottom: 100px;
+    padding-bottom: 80px;
 }
 
 .container {
-    padding: 140px 15px 120px;
+    padding: 140px 15px 80px;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -35,7 +35,7 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* تصميم الهيدر (مطابق للصفحة الرئيسية مع إضافة زر الرجوع) */
+/* تصميم الهيدر (مطابق للصفحة الرئيسية مع إضافة زر Home) */
 header {
     position: fixed;
     top: 0;
@@ -64,21 +64,23 @@ header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.back-button {
-    color: #90e0ef;
-    font-size: 1.2rem;
+.home-icon {
+    position: relative;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(76, 201, 240, 0.3);
+    border-radius: 50%;
+    color: #90e0ef;
+    font-size: 1.1rem;
     transition: all 0.3s ease;
+    border: 1px solid rgba(76, 201, 240, 0.3);
+    text-decoration: none;
 }
 
-.back-button:hover {
+.home-icon:hover {
     background: rgba(76, 201, 240, 0.2);
     transform: translateY(-2px);
 }
@@ -288,7 +290,7 @@ header {
     box-shadow: 0 5px 15px rgba(58, 134, 255, 0.4);
 }
 
-/* تصميم التذييل (مطابق للصفحة الرئيسية) */
+/* تصميم التذييل (مطابق للصفحة الرئيسية مع ارتفاع 60px) */
 footer {
     position: fixed;
     bottom: 0;
@@ -297,8 +299,8 @@ footer {
     background: linear-gradient(90deg, #0f2027, #203a43);
     border-top: 3px solid #4cc9f0;
     z-index: 1000;
-    padding: 15px 0 10px;
-    height: 80px;
+    padding: 8px 0 5px;
+    height: 60px;
 }
 
 .footer-icons {
@@ -314,15 +316,15 @@ footer {
     align-items: center;
     text-decoration: none;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     transition: all 0.3s ease;
     flex: 1;
-    padding: 5px 0;
+    padding: 3px 0;
 }
 
 .footer-icons .icon i {
-    font-size: 1.3rem;
-    margin-bottom: 3px;
+    font-size: 1.1rem;
+    margin-bottom: 2px;
 }
 
 .footer-icons .icon:hover {
@@ -334,22 +336,22 @@ footer {
     color: #0f2027;
     z-index: 1;
     flex: 0 0 auto;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: linear-gradient(90deg, #d4af37, #f9d71c);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: -25px;
+    margin-top: -20px;
     box-shadow: 0 5px 15px rgba(249, 215, 28, 0.4);
     animation: float 3s ease-in-out infinite, pulse 2s infinite;
     transition: all 0.3s ease;
 }
 
 .footer-icons .highlight i {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
 }
 
 .footer-icons .highlight span {
@@ -434,10 +436,10 @@ footer {
     display: none !important;
 }
 
-/* تصميم متجاوب */
+/* تصميم متجاوب - تحسينات للشاشات الصغيرة */
 @media (max-width: 768px) {
     .container {
-        padding: 140px 10px 110px;
+        padding: 140px 10px 70px;
     }
     
     .logo-container h1 {
@@ -450,7 +452,7 @@ footer {
         font-size: 1rem;
     }
     
-    .back-button {
+    .home-icon {
         width: 32px;
         height: 32px;
         font-size: 1rem;
@@ -460,26 +462,43 @@ footer {
         padding: 20px 15px;
     }
     
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-outline {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .btn {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
     .image-upload-container {
         flex-direction: column;
         align-items: flex-start;
     }
     
     .footer-icons .icon {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
     
     .footer-icons .icon i {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
     
     .footer-icons .highlight {
-        width: 55px;
-        height: 55px;
+        width: 45px;
+        height: 45px;
     }
     
     .footer-icons .highlight i {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 }
 
@@ -497,29 +516,45 @@ footer {
         height: 35px;
     }
     
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .form-group label {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+    
     /* إظهار النص تحت الأيقونات في الشريط السفلي للشاشات الصغيرة */
     .footer-icons .icon span {
         display: block;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         margin-top: 2px;
     }
     
     .footer-icons .icon i {
         margin-bottom: 0;
-        font-size: 1.4rem;
+        font-size: 1rem;
     }
     
     .footer-icons .highlight {
-        width: 50px;
-        height: 50px;
-        margin-top: -20px;
+        width: 40px;
+        height: 40px;
+        margin-top: -15px;
     }
     
     .footer-icons .highlight i {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
     
     .footer-icons .highlight span {
         display: none;
     }
-  }
+    }
