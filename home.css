@@ -1,4 +1,4 @@
-/* home.css - تصميم جديد لموقع تسريع */
+/* home.css - الإصدار المحسن */
 
 /* أنماط عامة */
 * {
@@ -12,11 +12,11 @@ body {
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #fff;
     min-height: 100vh;
-    padding-bottom: 80px; /* مساحة للفوتر */
+    padding-bottom: 100px; /* زيادة المساحة للفوتر */
 }
 
 .container {
-    padding: 140px 15px 100px; /* زيادة المساحة العلوية لمنع التداخل مع الهيدر */
+    padding: 150px 15px 120px; /* زيادة المساحة العلوية والسفلية */
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -315,7 +315,7 @@ header {
     font-size: 1.1rem;
 }
 
-/* تصميم الفوتر الجديد */
+/* تصميم الفوتر الجديد مع زيادة الارتفاع */
 footer {
     position: fixed;
     bottom: 0;
@@ -324,13 +324,15 @@ footer {
     background: linear-gradient(90deg, #0f2027, #203a43);
     border-top: 3px solid #4cc9f0;
     z-index: 1000;
-    padding: 10px 0 5px;
+    padding: 15px 0 10px; /* زيادة الارتفاع */
+    height: 75px; /* زيادة الارتفاع */
 }
 
 .footer-icons {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    height: 100%;
 }
 
 .footer-icons .icon {
@@ -430,22 +432,29 @@ footer {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        padding: 10px 15px;
     }
     
     .search-container {
         margin: 0;
         max-width: 400px;
+        flex: 1;
     }
     
     .filters-row {
         justify-content: flex-end;
         margin: 0;
+        gap: 15px;
+    }
+    
+    .container {
+        padding-top: 140px; /* تقليل المساحة العلوية في الشاشات الكبيرة */
     }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 130px 10px 90px;
+        padding: 160px 10px 110px; /* زيادة المساحة العلوية في الشاشات الصغيرة */
     }
     
     .logo-container h1 {
