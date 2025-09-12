@@ -12,11 +12,11 @@ body {
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #fff;
     min-height: 100vh;
-    padding-bottom: 80px;
+    padding-bottom: 100px;
 }
 
 .container {
-    padding: 140px 15px 80px;
+    padding: 140px 15px 120px;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -35,7 +35,7 @@ body {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* تصميم الهيدر (مطابق للصفحة الرئيسية مع إضافة زر Home) */
+/* تصميم الهيدر (مطابق للصفحة الرئيسية مع إضافة زر الرجوع) */
 header {
     position: fixed;
     top: 0;
@@ -290,7 +290,7 @@ header {
     box-shadow: 0 5px 15px rgba(58, 134, 255, 0.4);
 }
 
-/* تصميم التذييل (مطابق للصفحة الرئيسية مع ارتفاع 60px) */
+/* تصميم التذييل (مطابق للصفحة الرئيسية) */
 footer {
     position: fixed;
     bottom: 0;
@@ -299,8 +299,8 @@ footer {
     background: linear-gradient(90deg, #0f2027, #203a43);
     border-top: 3px solid #4cc9f0;
     z-index: 1000;
-    padding: 8px 0 5px;
-    height: 60px;
+    padding: 15px 0 10px;
+    height: 80px;
 }
 
 .footer-icons {
@@ -316,15 +316,15 @@ footer {
     align-items: center;
     text-decoration: none;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     transition: all 0.3s ease;
     flex: 1;
-    padding: 3px 0;
+    padding: 5px 0;
 }
 
 .footer-icons .icon i {
-    font-size: 1.1rem;
-    margin-bottom: 2px;
+    font-size: 1.3rem;
+    margin-bottom: 3px;
 }
 
 .footer-icons .icon:hover {
@@ -336,22 +336,22 @@ footer {
     color: #0f2027;
     z-index: 1;
     flex: 0 0 auto;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: linear-gradient(90deg, #d4af37, #f9d71c);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: -20px;
+    margin-top: -25px;
     box-shadow: 0 5px 15px rgba(249, 215, 28, 0.4);
     animation: float 3s ease-in-out infinite, pulse 2s infinite;
     transition: all 0.3s ease;
 }
 
 .footer-icons .highlight i {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
 }
 
 .footer-icons .highlight span {
@@ -436,10 +436,10 @@ footer {
     display: none !important;
 }
 
-/* تصميم متجاوب - تحسينات للشاشات الصغيرة */
+/* تصميم متجاوب */
 @media (max-width: 768px) {
     .container {
-        padding: 140px 10px 70px;
+        padding: 140px 10px 110px;
     }
     
     .logo-container h1 {
@@ -457,26 +457,10 @@ footer {
         height: 32px;
         font-size: 1rem;
     }
+    }
     
     .post-form {
         padding: 20px 15px;
-    }
-    
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-    }
-    
-    .btn-outline {
-        padding: 8px 12px;
-        font-size: 0.85rem;
-    }
-    
-    .btn {
-        padding: 10px;
-        font-size: 0.9rem;
     }
     
     .image-upload-container {
@@ -485,20 +469,20 @@ footer {
     }
     
     .footer-icons .icon {
-        font-size: 0.7rem;
+        font-size: 0.75rem;
     }
     
     .footer-icons .icon i {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
     
     .footer-icons .highlight {
-        width: 45px;
-        height: 45px;
+        width: 55px;
+        height: 55px;
     }
     
     .footer-icons .highlight i {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
     }
 }
 
@@ -516,45 +500,29 @@ footer {
         height: 35px;
     }
     
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-        padding: 8px 10px;
-        font-size: 0.85rem;
-    }
-    
-    .form-group label {
-        font-size: 0.9rem;
-    }
-    
-    .btn {
-        padding: 8px;
-        font-size: 0.85rem;
-    }
-    
     /* إظهار النص تحت الأيقونات في الشريط السفلي للشاشات الصغيرة */
     .footer-icons .icon span {
         display: block;
-        font-size: 0.65rem;
+        font-size: 0.7rem;
         margin-top: 2px;
     }
     
     .footer-icons .icon i {
         margin-bottom: 0;
-        font-size: 1rem;
+        font-size: 1.4rem;
     }
     
     .footer-icons .highlight {
-        width: 40px;
-        height: 40px;
-        margin-top: -15px;
+        width: 50px;
+        height: 50px;
+        margin-top: -20px;
     }
     
     .footer-icons .highlight i {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
     
     .footer-icons .highlight span {
         display: none;
     }
-    }
+}
