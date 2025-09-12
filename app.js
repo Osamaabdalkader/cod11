@@ -49,9 +49,9 @@ function setupEventListeners() {
         profileHeaderIcon.addEventListener('click', () => {
             const user = auth.currentUser;
             if (user) {
-                window.location.href = 'profile.html';
+                window.location.href = 'dashboard.html';
             } else {
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
@@ -65,7 +65,7 @@ function setupEventListeners() {
                 window.location.href = 'groups.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
@@ -79,7 +79,7 @@ function setupEventListeners() {
                 window.location.href = 'cart.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
@@ -93,7 +93,7 @@ function setupEventListeners() {
                 window.location.href = 'messages.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
@@ -110,7 +110,7 @@ function setupEventListeners() {
                 window.location.href = 'more.html'; 
             } else {
                 alert('يجب تسجيل الدخول أولاً');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
@@ -128,7 +128,7 @@ function setupEventListeners() {
             if (!user) {
                 e.preventDefault();
                 alert('يجب تسجيل الدخول أولاً');
-                window.location.href = 'auth.html';
+                window.location.href = 'login.html';
             }
         });
     }
