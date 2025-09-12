@@ -1,4 +1,4 @@
-// app.js - الإصدار الكامل بعد التعديل
+// app.js - الإصدار المحسن بعد التعديلات
 import { 
   auth, database, storage,
   onAuthStateChanged, signOut,
@@ -15,7 +15,7 @@ const supportIcon = document.getElementById('support-icon');
 const moreIcon = document.getElementById('more-icon');
 const groupsIcon = document.getElementById('groups-icon');
 const cartIcon = document.getElementById('cart-icon');
-
+const addButton = document.getElementById('add-button');
 
 // متغيرات النظام
 let currentUserData = null;
@@ -28,6 +28,7 @@ let currentFilter = {
 
 // تحميل المنشورات عند بدء التحميل
 document.addEventListener('DOMContentLoaded', () => {
+    showPostsLoading();
     loadPosts();
     checkAuthState();
     initFiltersAndSearch();
@@ -48,9 +49,9 @@ function setupEventListeners() {
         profileHeaderIcon.addEventListener('click', () => {
             const user = auth.currentUser;
             if (user) {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'profile.html';
             } else {
-                window.location.href = 'login.html';
+                window.location.href = 'auth.html';
             }
         });
     }
@@ -64,7 +65,7 @@ function setupEventListeners() {
                 window.location.href = 'groups.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'login.html';
+                window.location.href = 'auth.html';
             }
         });
     }
@@ -78,7 +79,7 @@ function setupEventListeners() {
                 window.location.href = 'cart.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'login.html';
+                window.location.href = 'auth.html';
             }
         });
     }
@@ -92,7 +93,7 @@ function setupEventListeners() {
                 window.location.href = 'messages.html';
             } else {
                 alert('يجب تسجيل الدخول أولاً للوصول إلى الرسائل');
-                window.location.href = 'login.html';
+                window.location.href = 'auth.html';
             }
         });
     }
@@ -109,13 +110,30 @@ function setupEventListeners() {
                 window.location.href = 'more.html'; 
             } else {
                 alert('يجب تسجيل الدخول أولاً');
-                window.location.href = 'login.html';
+                window.location.href = 'auth.html';
             }
         });
     }
-                                           }
+    
+    // زر الإضافة - إضافة تأثيرات عند النقر
+    if (addButton) {
+        addButton.addEventListener('click', (e) => {
+            // تأثير النقر
+            e.target.classList.add('clicked');
+            setTimeout(() => {
+                e.target.classList.remove('clicked');
+            }, 300);
+            
+            const user = auth.currentUser;
+            if (!user) {
+                e.preventDefault();
+                alert('يجب تسجيل الدخول أولاً');
+                window.location.href = 'auth.html';
+            }
+        });
+    }
+}
 
-  
 // التحقق من حالة المصادقة
 function checkAuthState() {
     onAuthStateChanged(auth, user => {
@@ -126,10 +144,6 @@ function checkAuthState() {
                 if (snapshot.exists()) {
                     currentUserData = snapshot.val();
                     currentUserData.uid = user.uid;
-                    
-                    
-                    // تطبيق سمة المرتبة
-                    applyRankTheme(currentUserData.rank || 0);
                     
                     // تحديث واجهة المستخدم
                     updateUIForLoggedInUser();
@@ -163,7 +177,6 @@ function loadAdminUsers() {
 
 // تحميل المنشورات للجميع
 function loadPosts() {
-    showLoading();
     const postsRef = ref(database, 'posts');
     onValue(postsRef, (snapshot) => {
         postsContainer.innerHTML = '';
@@ -190,7 +203,7 @@ function loadPosts() {
         } else {
             postsContainer.innerHTML = '<p class="no-posts">لا توجد منشورات بعد</p>';
         }
-        hideLoading();
+        hidePostsLoading();
     }, {
         onlyOnce: true
     });
@@ -240,16 +253,11 @@ function createPostCard(post) {
                         <span>${post.price}</span>
                     </div>
                 ` : ''}
-                
-                <div class="detail-item">
-                    <i class="fas fa-clock"></i>
-                    <span>${timeAgo}</span>
-                </div>
             </div>
             
             <div class="post-meta">
                 <div class="post-time">
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="fas fa-clock"></i>
                     <span>${timeAgo}</span>
                 </div>
                 <div class="post-author">
@@ -268,17 +276,6 @@ function createPostCard(post) {
     
     return postCard;
 }
-
-
-// دالة لتطبيق سمة المرتبة
-function applyRankTheme(rank) {
-    document.body.classList.remove('rank-0', 'rank-1', 'rank-2', 'rank-3', 'rank-4', 
-                                  'rank-5', 'rank-6', 'rank-7', 'rank-8', 'rank-9', 'rank-10');
-    document.body.classList.add(`rank-${rank}`);
-}
-
-
-
 
 // تهيئة الفلاتر والبحث
 function initFiltersAndSearch() {
@@ -398,11 +395,39 @@ function formatTimeAgo(timestamp) {
     });
 }
 
-// وظائف مساعدة
+// تحديث واجهة المستخدم للمستخدم المسجل
+function updateUIForLoggedInUser() {
+    // يمكن إضافة تحديثات إضافية هنا
+    console.log('تم تحديث واجهة المستخدم للمستخدم المسجل');
+}
+
+// تحديث واجهة المستخدم للزائر
+function updateUIForLoggedOutUser() {
+    // يمكن إضافة تحديثات إضافية هنا
+    console.log('تم تحديث واجهة المستخدم للزائر');
+}
+
+// وظائف مساعدة للتحميل
+function showPostsLoading() {
+    postsContainer.innerHTML = `
+        <div class="posts-loading">
+            <div class="spinner"></div>
+            <p>جاري تحميل المنشورات...</p>
+        </div>
+    `;
+}
+
+function hidePostsLoading() {
+    const loadingElement = document.querySelector('.posts-loading');
+    if (loadingElement) {
+        loadingElement.remove();
+    }
+}
+
 function showLoading() {
     if (loadingOverlay) loadingOverlay.classList.remove('hidden');
 }
 
 function hideLoading() {
     if (loadingOverlay) loadingOverlay.classList.add('hidden');
-}
+      }
