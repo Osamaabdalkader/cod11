@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسريع - منصة النشر الاجتماعي</title>
+    <title>منصة تسريع الإلكترونية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="home.css">
@@ -14,7 +14,7 @@
         <div class="gold-bar"></div>
         <div class="header-top">
             <div class="logo-container">
-                <img src="tasreea.png" alt="تسريع" class="logo-image">
+                <img src="tasreea.png" alt="منصة تسريع الإلكترونية" class="logo-image">
                 <h1>منصة تسريع الإلكترونية</h1>
             </div>
             <div class="header-top-icons">
@@ -34,7 +34,7 @@
                 <button class="search-btn"><i class="fas fa-search"></i></button>
             </div>
 
-            <div class="filters-container">
+            <div class="filters-scroll">
                 <div class="filters-row">
                     <div class="filter-category">
                         <select class="filter-select">
@@ -67,12 +67,11 @@
 
     <!-- الصفحة الرئيسية -->
     <div class="container">
-        <div class="posts-loading" id="posts-loading">
-            <div class="spinner-small"></div>
-            <p>جاري تحميل المنشورات...</p>
-        </div>
         <div class="posts-grid" id="posts-container">
-            <!-- سيتم تحميل المنشورات هنا -->
+            <div class="posts-loading">
+                <div class="spinner"></div>
+                <p>جاري تحميل المنشورات...</p>
+            </div>
         </div>
     </div>
 
@@ -105,4 +104,4 @@
     <!-- Firebase SDK -->
     <script type="module" src="app.js"></script>
 </body>
-    </html>
+                    </html>
