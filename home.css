@@ -12,16 +12,16 @@ body {
     background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
     color: #fff;
     min-height: 100vh;
-    padding-bottom: 100px; /* زيادة المساحة للفوتر */
+    padding-bottom: 100px;
 }
 
 .container {
-    padding: 150px 15px 120px; /* زيادة المساحة العلوية والسفلية */
+    padding: 160px 15px 120px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* تصميم الهيدر الجديد */
+/* تصميم الهيدر */
 header {
     position: fixed;
     top: 0;
@@ -189,7 +189,7 @@ header {
     border-color: #4cc9f0;
 }
 
-/* تصميم بطاقات المنتجات الجديدة */
+/* تصميم بطاقات المنتجات */
 .posts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -315,7 +315,7 @@ header {
     font-size: 1.1rem;
 }
 
-/* تصميم الفوتر الجديد مع زيادة الارتفاع */
+/* تصميم الفوتر مع زيادة الارتفاع */
 footer {
     position: fixed;
     bottom: 0;
@@ -324,8 +324,8 @@ footer {
     background: linear-gradient(90deg, #0f2027, #203a43);
     border-top: 3px solid #4cc9f0;
     z-index: 1000;
-    padding: 15px 0 10px; /* زيادة الارتفاع */
-    height: 75px; /* زيادة الارتفاع */
+    padding: 15px 0 10px;
+    height: 80px;
 }
 
 .footer-icons {
@@ -380,7 +380,7 @@ footer {
 }
 
 .footer-icons .highlight span {
-    font-weight: bold;
+    display: none; /* إخفاء النص تحت زر الإضافة */
 }
 
 .footer-icons .highlight:active {
@@ -433,11 +433,12 @@ footer {
         align-items: center;
         justify-content: space-between;
         padding: 10px 15px;
+        height: auto;
     }
     
     .search-container {
         margin: 0;
-        max-width: 400px;
+        max-width: 500px;
         flex: 1;
     }
     
@@ -448,13 +449,13 @@ footer {
     }
     
     .container {
-        padding-top: 140px; /* تقليل المساحة العلوية في الشاشات الكبيرة */
+        padding-top: 140px;
     }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 160px 10px 110px; /* زيادة المساحة العلوية في الشاشات الصغيرة */
+        padding: 160px 10px 110px;
     }
     
     .logo-container h1 {
@@ -547,8 +548,11 @@ footer {
         min-width: 100px;
     }
     
+    /* إظهار النص تحت الأيقونات في الشريط السفلي للشاشات الصغيرة */
     .footer-icons .icon span {
-        display: none;
+        display: block;
+        font-size: 0.7rem;
+        margin-top: 2px;
     }
     
     .footer-icons .icon i {
@@ -564,5 +568,9 @@ footer {
     
     .footer-icons .highlight i {
         font-size: 1.4rem;
+    }
+    
+    .footer-icons .highlight span {
+        display: none; /* التأكد من إخفاء النص تحت زر الإضافة */
     }
     }
